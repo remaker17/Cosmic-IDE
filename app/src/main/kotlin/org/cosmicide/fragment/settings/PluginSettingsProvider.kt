@@ -37,9 +37,8 @@ class PluginSettingsProvider(private val activity: FragmentActivity) : SettingsP
                 summary = "View available plugins"
                 onClick {
                     activity.supportFragmentManager.commit {
-                        add(R.id.fragment_container, PluginListFragment())
+                        replace(R.id.fragment_container, PluginListFragment())
                         addToBackStack(null)
-                        setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     }
                     true
                 }

@@ -8,8 +8,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?colorSurface">
+    android:layout_height="match_parent">
 
     <org.cosmicide.editor.IdeEditor
         android:id="@+id/editor"
@@ -21,8 +20,8 @@
     <io.github.rosemoe.sora.widget.SymbolInputView
         android:id="@+id/symbol_view"
         android:layout_width="match_parent"
-        android:layout_height="?minTouchTargetSize"
-        android:backgroundTint="?colorSurface"
+        android:layout_height="?attr/minTouchTargetSize"
+        android:backgroundTint="?attr/colorSurface"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editor" />
 

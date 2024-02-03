@@ -78,10 +78,7 @@ class ProjectOutputFragment : BaseBindingFragment<FragmentCompileInfoBinding>() 
         binding.toolbar.title = "Running"
         binding.toolbar.subtitle = project.name
         binding.toolbar.setNavigationOnClickListener {
-            parentFragmentManager.commit {
-                remove(this@ProjectOutputFragment)
-                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-            }
+            parentFragmentManager.popBackStack()
         }
 
         binding.logList.setAdapter(adapter)

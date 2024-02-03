@@ -359,18 +359,16 @@ class EditorFragment : BaseBindingFragment<FragmentEditorBinding>() {
 
                     R.id.action_chat -> {
                         parentFragmentManager.commit {
-                            add(R.id.fragment_container, ChatFragment())
+                            replace(R.id.fragment_container, ChatFragment())
                             addToBackStack(null)
-                            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         }
                         true
                     }
 
                     R.id.action_git -> {
                         parentFragmentManager.commit {
-                            add(R.id.fragment_container, GitFragment())
+                            replace(R.id.fragment_container, GitFragment())
                             addToBackStack(null)
-                            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         }
                         true
                     }
@@ -580,17 +578,15 @@ class EditorFragment : BaseBindingFragment<FragmentEditorBinding>() {
         ProjectHandler.clazz = clazz
         editorAdapter.saveAll()
         parentFragmentManager.commit {
-            add(R.id.fragment_container, CompileInfoFragment())
+            replace(R.id.fragment_container, CompileInfoFragment())
             addToBackStack(null)
-            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         }
     }
 
     private fun navigateToSettingsFragment() {
         parentFragmentManager.commit {
-            add(R.id.fragment_container, SettingsFragment())
+            replace(R.id.fragment_container, SettingsFragment())
             addToBackStack(null)
-            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         }
     }
 

@@ -393,21 +393,19 @@ class ProjectFragment : BaseBindingFragment<FragmentProjectBinding>(),
     private fun navigateToNewProjectFragment() {
         setOnClickListeners()
         parentFragmentManager.commit {
-            add(R.id.fragment_container, NewProjectFragment())
+            replace(R.id.fragment_container, NewProjectFragment())
             addToBackStack(null)
-            setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         }
     }
 
     private fun navigateToEditorFragment(project: Project) {
         parentFragmentManager.commit {
-            add(R.id.fragment_container, EditorFragment().apply {
+            replace(R.id.fragment_container, EditorFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable("project", project)
                 }
             })
             addToBackStack(null)
-            setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         }
     }
 }
