@@ -35,7 +35,7 @@ class ProjectOutputFragment : BaseBindingFragment<FragmentCompileInfoBinding>() 
     val project: Project = ProjectHandler.getProject()
         ?: throw IllegalStateException("No project set")
     private var adapter: CompileLogAdapter? = null
-    private val logs: ArrayList<LogItem> = arrayList()
+    private val logs: ArrayList<LogItem> = emptyList()
     var isRunning: Boolean = false
 
     override fun getViewBinding() = FragmentCompileInfoBinding.inflate(layoutInflater)
@@ -96,7 +96,7 @@ class ProjectOutputFragment : BaseBindingFragment<FragmentCompileInfoBinding>() 
             )
         )
 
-        adapter.notifyItemInserted(logs.size)
+        adapter?.notifyItemInserted(logs.size)
         binding.logList.smoothScrollToPosition(logs.size - 1)
     }
 

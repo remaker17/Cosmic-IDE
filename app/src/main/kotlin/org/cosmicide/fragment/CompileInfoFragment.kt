@@ -30,7 +30,7 @@ import org.cosmicide.util.ProjectHandler
  */
 class CompileInfoFragment : BaseBindingFragment<FragmentCompileInfoBinding>() {
     private val project: Project? = ProjectHandler.getProject()
-    private val logs: ArrayList<LogItem> = arrayList()
+    private val logs: ArrayList<LogItem> = emptyList()
     private var compiler: Compiler? = null
     private var adapter: CompileLogAdapter? = null
 
@@ -69,7 +69,7 @@ class CompileInfoFragment : BaseBindingFragment<FragmentCompileInfoBinding>() {
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     binding.logList.post {
-                        addLogItem(kind = BuildReportKind.ERROR, message = e.message)
+                        addLogItem(kind = BuildReportKind.ERROR, message = e.message ?: "No message from exception.")
                     }
                 }
             }
@@ -107,7 +107,7 @@ class CompileInfoFragment : BaseBindingFragment<FragmentCompileInfoBinding>() {
             )
         )
 
-        adapter.notifyItemInserted(logs.size)
+        adapter?.notifyItemInserted(logs.size)
         binding.logList.smoothScrollToPosition(logs.size - 1)
     }
 
