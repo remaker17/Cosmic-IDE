@@ -30,7 +30,7 @@ import org.cosmicide.util.ProjectHandler
  */
 class CompileInfoFragment : BaseBindingFragment<FragmentCompileInfoBinding>() {
     private val project: Project? = ProjectHandler.getProject()
-    private val logs: ArrayList<LogItem> = emptyList()
+    private val logs = arrayListOf<LogItem>()
     private var compiler: Compiler? = null
     private var adapter: CompileLogAdapter? = null
 

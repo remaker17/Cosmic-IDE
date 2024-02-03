@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 
         ResourceUtil.checkForMissingResources(
             fragmentManager = supportFragmentManager,
-            fragmentContainerId = binding.fragmentContainerId
+            fragmentContainerId = binding.fragmentContainer.id
         )
 
         Shizuku.addRequestPermissionResultListener(listener)

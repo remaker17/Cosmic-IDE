@@ -35,7 +35,7 @@ class ProjectOutputFragment : BaseBindingFragment<FragmentCompileInfoBinding>() 
     val project: Project = ProjectHandler.getProject()
         ?: throw IllegalStateException("No project set")
     private var adapter: CompileLogAdapter? = null
-    private val logs: ArrayList<LogItem> = emptyList()
+    private val logs = arrayListOf<LogItem>()
     var isRunning: Boolean = false
 
     override fun getViewBinding() = FragmentCompileInfoBinding.inflate(layoutInflater)
