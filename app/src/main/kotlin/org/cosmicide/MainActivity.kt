@@ -28,6 +28,7 @@ import org.cosmicide.fragment.InstallResourcesFragment
 import org.cosmicide.fragment.ProjectFragment
 import org.cosmicide.util.CommonUtils
 import org.cosmicide.util.ResourceUtil
+import org.cosmicide.util.ShizukuUtil
 import org.cosmicide.util.awaitBinderReceived
 import org.cosmicide.util.isShizukuInstalled
 import rikka.shizuku.Shizuku
