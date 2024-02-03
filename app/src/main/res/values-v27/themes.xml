@@ -5,10 +5,9 @@
   ~ You should have received a copy of the GNU General Public License along with Cosmic IDE. If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
-
-    <style name="Theme.CosmicIde.BaseV27" parent="Theme.CosmicIde.Base">
-        <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
+<resources>
+    <style name="Theme.CosmicIde.BaseV27" parent="Base.Theme.CosmicIde">
+        <item name="android:enforceNavigationBarContrast">false</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightNavigationBar">?attr/isLightTheme</item>
     </style>

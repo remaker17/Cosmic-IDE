@@ -92,12 +92,10 @@ class EditorFragment : BaseBindingFragment<FragmentEditorBinding>() {
 
         binding.tabLayout.isSmoothScrollingEnabled = false
 
-        binding.included.refresher.apply {
+        binding.refreshLayout.apply {
             setOnRefreshListener {
                 isRefreshing = true
-                lifecycleScope.launch {
-                    initTreeView()
-                }
+                this@refreshLayout.post { initTreeView() }
                 isRefreshing = false
             }
         }
@@ -174,7 +172,7 @@ class EditorFragment : BaseBindingFragment<FragmentEditorBinding>() {
     }
 
     private fun initTreeView() {
-        binding.included.recycler.apply {
+        binding.recyclerView.apply {
             val nodes = TreeViewAdapter.merge(project.root)
             layoutManager = LinearLayoutManager(context)
             adapter = TreeViewAdapter(context, nodes).apply {

@@ -24,7 +24,6 @@ android {
         }
     }
 
-
     flavorDimensions += "environment"
 
     productFlavors {

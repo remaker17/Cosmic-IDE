@@ -6,6 +6,7 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -22,7 +23,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:contentDescription="@string/navigation_item_kind"
-        android:src="@drawable/baseline_close_24" />
+        app:srcCompat="@drawable/baseline_close_24" />
 
     <LinearLayout
         android:layout_width="wrap_content"

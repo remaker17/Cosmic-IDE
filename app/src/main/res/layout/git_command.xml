@@ -25,7 +25,7 @@
             android:inputType="textMultiLine" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/execute"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,7 +38,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textAppearance="?attr/textAppearanceBodyMedium"
-        android:textSize="14sp"
         android:visibility="gone"
         tools:text="Output" />
 

@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.cosmicide.R
 import org.cosmicide.build.BuildReporter
+import org.cosmicide.build.BuildReportKind
 import org.cosmicide.common.BaseBindingFragment
 import org.cosmicide.compile.Compiler
 import org.cosmicide.databinding.FragmentCompileInfoBinding
@@ -27,37 +28,28 @@ import org.cosmicide.util.ProjectHandler
  * A fragment for displaying information about the compilation process.
  */
 class CompileInfoFragment : BaseBindingFragment<FragmentCompileInfoBinding>() {
-    val project: Project = ProjectHandler.getProject()
-        ?: throw IllegalStateException("No project set")
-    val reporter by lazy {
-        BuildReporter { report ->
-            if (report.message.isEmpty()) return@BuildReporter
-            // Update the info editor with the build output
-            val text = binding.infoEditor.text
-            lifecycleScope.launch {
-                text.insert(
-                    text.lineCount - 1,
-                    0,
-                    "${report.kind}: ${report.message}\n"
-                )
-            }
-        }
-    }
-    val compiler: Compiler = Compiler(project, reporter)
+    private val project: Project? = ProjectHandler.getProject()
+    private val logs: List<LogItem> = emptyList()
+    private var compiler: Compiler? = null
+    private var adapter: CompileLogAdapter? = null
 
     override fun getViewBinding() = FragmentCompileInfoBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.infoEditor.apply {
-            setEditorLanguage(TextMateLanguage.create("source.build", false))
-            editable = false
-            isLineNumberEnabled = false
+        adapter = CompileLogAdapter(logs)
+        compiler = Compiler(requireContext(), checkProject(project)) { report ->
+            if (report.message.isEmpty()) {
+                return@BuildReporter
+            }
+            binding.logList.post {
+                addLogItem(kind = report.kind, message = report.message);
+            }
         }
 
         binding.toolbar.apply {
-            title = "Compiling ${project.name}"
+            subtitle = project?.name
             setNavigationOnClickListener {
                 parentFragmentManager.popBackStack()
             }
@@ -65,7 +57,7 @@ class CompileInfoFragment : BaseBindingFragment<FragmentCompileInfoBinding>() {
 
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                compiler.compile()
+                compiler?.compile()
                 if (reporter.buildSuccess) {
                     withContext(Dispatchers.Main) {
                         navigateToProjectOutputFragment()
@@ -73,19 +65,25 @@ class CompileInfoFragment : BaseBindingFragment<FragmentCompileInfoBinding>() {
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    binding.infoEditor.text.insert(
-                        binding.infoEditor.text.lineCount - 1,
-                        0,
-                        "Build failed: ${e.message}\n"
-                    )
+                    binding.logList.post {
+                        addLogItem(kind = BuildReportKind.ERROR, message = e.message)
+                    }
                 }
             }
         }
     }
 
     override fun onDestroyView() {
-        binding.infoEditor.release()
         super.onDestroyView()
+        adapter = null
+        compiler = null
+    }
+
+    private fun checkProject(project: Project?): Project {
+        if (project == null) {
+            throw IllegalStateException("No project set")
+        }
+        return project!!
     }
 
     private fun navigateToProjectOutputFragment() {
@@ -95,4 +93,21 @@ class CompileInfoFragment : BaseBindingFragment<FragmentCompileInfoBinding>() {
             setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         }
     }
+
+    private fun addLogItem(kind: BuildReportKind, message: String) {
+        logs.add(
+            LogItem(
+                kind = kind,
+                message = message
+            )
+        )
+
+        adapter.notifyItemInserted(logs.size())
+        binding.logList.smoothScrollToPosition(logs.size() - 1)
+    }
+
+    data class LogItem(
+        val kind: BuildReportKind,
+        val message: String
+    )
 }

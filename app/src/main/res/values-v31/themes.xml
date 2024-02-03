@@ -7,7 +7,6 @@
 
 <resources>
     <style name="Theme.CosmicIde.BaseV31" parent="Theme.CosmicIde.BaseV27">
-        <item name="android:overScrollMode">always</item>
         <item name="android:windowSplashScreenBackground">@color/logo_background</item>
     </style>
 

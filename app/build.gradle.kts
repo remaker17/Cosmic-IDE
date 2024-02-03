@@ -54,7 +54,6 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
 
-
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
         apiVersion = "1.9"
@@ -220,7 +219,6 @@ dependencies {
     implementation("org.slf4j:slf4j-simple:2.1.0-alpha1")
 
     implementation("com.google.ai.client.generativeai:generativeai:0.1.2")
-
 
     val shizukuVersion = "13.1.5"
     implementation("dev.rikka.shizuku:api:$shizukuVersion")

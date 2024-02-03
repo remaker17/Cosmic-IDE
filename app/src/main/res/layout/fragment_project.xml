@@ -11,7 +11,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:transitionGroup="true"
-    android:background="?colorSurface"
     tools:context="org.cosmicide.fragment.ProjectFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -57,7 +56,6 @@
                 android:id="@+id/project_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:transitionGroup="true"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
@@ -65,15 +63,15 @@
                 android:id="@+id/no_projects"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
                 android:gravity="center"
                 android:text="@string/no_projects_found_create_one_now"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:transitionGroup="true"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
                 android:visibility="gone" />
 
         </ViewSwitcher>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
     <include
         android:id="@+id/fabs"

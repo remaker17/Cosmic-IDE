@@ -44,6 +44,7 @@
     <string name="additional_javac_flags_desc">Дополнительные флаги для передачи в Javac</string>
 
     <!-- Strings used for compilation -->
+    <string name="compiler">Компилятор</string>
     <string name="compiling_java">Компиляция Java-кода</string>
     <string name="compiling_kotlin">Компиляция Kotlin-кода</string>
     <string name="compiling_class_files_to_dex">Компиляция файлов классов в dex</string>

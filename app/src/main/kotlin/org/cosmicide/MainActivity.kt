@@ -13,12 +13,12 @@ import android.os.Bundle
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updateLayoutParams
-import androidx.fragment.app.commit
+import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.color.DynamicColors
 import kotlinx.coroutines.launch
@@ -36,94 +36,72 @@ import rikka.shizuku.ShizukuProvider
 
 class MainActivity : AppCompatActivity() {
 
-    var themeInt = 0
     private lateinit var binding: ActivityMainBinding
-    val shizukuPermissionCode = 1
 
-    override fun onCreateView(
-        parent: View?,
-        name: String,
-        context: Context,
-        attrs: AttributeSet
-    ): View? {
-        val accent = Prefs.appAccent
-
-        themeInt = CommonUtils.getAccent(accent)
-        setTheme(themeInt)
-
-        if (themeInt == R.style.Theme_CosmicIde)
-            DynamicColors.applyToActivityIfAvailable(this)
-
-        return super.onCreateView(parent, name, context, attrs)
+    companion object {
+        const val REQUEST_CODE_SHIZUKU = 1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
-
         super.onCreate(savedInstanceState)
+        DynamicColors.applyToActivityIfAvailable(this)
+        enableEdgeToEdge()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(applyBottomInset(binding.root))
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
-            val imeInset =
-                ViewCompat.getRootWindowInsets(view)!!.getInsets(WindowInsetsCompat.Type.ime())
-
-            val systemBarInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-
-            view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                leftMargin = systemBarInsets.left
-                rightMargin = systemBarInsets.right
-                topMargin = systemBarInsets.top
-                bottomMargin = if (imeInset.bottom > 0) imeInset.bottom else systemBarInsets.bottom
-            }
-
-
-            WindowInsetsCompat.CONSUMED
-        }
-
-        setContentView(binding.root)
-
-        if (ResourceUtil.missingResources().isNotEmpty()) {
-            supportFragmentManager.commit {
-                replace(binding.fragmentContainer.id, InstallResourcesFragment())
-            }
-        } else {
-            supportFragmentManager.commit {
-                replace(binding.fragmentContainer.id, ProjectFragment())
-            }
-        }
+        ResourceUtil.checkForMissingResources(
+            fragmentManager = supportFragmentManager,
+            containerId = binding.fragmentContainerId
+        )
 
         Shizuku.addRequestPermissionResultListener(listener)
 
-        lifecycleScope.launch {
-            awaitBinderReceived()
-            if (isShizukuInstalled() && Shizuku.shouldShowRequestPermissionRationale()) {
-                requestPermission()
+        if (!Shizuku.pingBinder()) {
+            Shizuku.addBinderReceivedListener {
+                if (checkShizukuPermission()) {
+                    ShizukuUtil.isReady = true
+                }
+            }
+        } else {
+            if (checkShizukuPermission()) {
+                ShizukuUtil.isReady = true
             }
         }
     }
 
-    private val listener =
-        OnRequestPermissionResultListener { _, grantResult ->
-            val granted = grantResult == PackageManager.PERMISSION_GRANTED
-            // Do stuff based on the result and the request code
-            if (granted) {
-                CommonUtils.showSnackBar(binding.root, "Permission Granted")
-            } else {
-                CommonUtils.showSnackBar(binding.root, "Permission Denied")
-                if (Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
-                    lifecycleScope.launch {
-                        awaitBinderReceived()
-                    }
-                }
+    private fun applyBottomInset(view: View): View {
+        return view.also {
+            ViewCompat.setOnApplyWindowInsetsListener(it) { view, insets ->
+                val bottomInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()
+                        or WindowInsetsCompat.Type.ime()).bottom
+                view.updatePadding(bottom = bottomInset)
+
+                insets
             }
         }
+    }
 
-    fun requestPermission() {
+    private val listener = OnRequestPermissionResultListener { requestCode, grantResult ->
+        if (requestCode != REQUEST_CODE_SHIZUKU) {
+            return@OnRequestPermissionResultListener
+        }
+        if (grantResult == PackageManager.PERMISSION_GRANTED) {
+            ShizukuUtil.isReady = true
+        }
+    }
+
+    private fun checkShizukuPermission(): Boolean {
         if (Shizuku.isPreV11()) {
-            requestPermissions(arrayOf(ShizukuProvider.PERMISSION), shizukuPermissionCode)
+            return false
+        } else if (Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
+            return true
+        } else if (Shizuku.shouldShowRequestPermissionRationale()) {
+            return false
         } else {
-            Shizuku.requestPermission(shizukuPermissionCode)
+            Shizuku.requestPermission(REQUEST_CODE_SHIZUKU)
+            return false;
         }
     }
 

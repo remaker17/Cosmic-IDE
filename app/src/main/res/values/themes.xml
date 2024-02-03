@@ -7,20 +7,16 @@
 
 <resources>
 
-    <style name="Theme.CosmicIde.Base" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.CosmicIde" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:fontFamily">@font/inter</item>
-        <item name="android:overScrollMode">never</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
 
-        <item name="android:navigationBarColor">
-            @android:color/transparent
-        </item>
         <item name="fontFamily">@font/inter</item>
     </style>
 
-    <style name="Theme.CosmicIde" parent="Theme.CosmicIde.Base" />
+    <style name="Theme.CosmicIde" parent="Base.Theme.CosmicIde" />
 
-    <style name="Theme.CosmicIde.Start" parent="Theme.SplashScreen">
+    <style name="Theme.CosmicIde.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_background</item>
         <item name="windowSplashScreenBackground">@color/splash_background</item>
     </style>

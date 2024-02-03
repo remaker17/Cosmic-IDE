@@ -28,6 +28,7 @@ import org.cosmicide.chat.ChatProvider
 import org.cosmicide.databinding.FragmentChatBinding
 import org.cosmicide.extension.getDip
 import org.cosmicide.common.BaseBindingFragment
+import org.cosmicide.util.ElevationColors
 
 class ChatFragment : BaseBindingFragment<FragmentChatBinding>() {
 
@@ -37,35 +38,33 @@ class ChatFragment : BaseBindingFragment<FragmentChatBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupUI(view.context)
-        setOnClickListeners()
+        setupUI(requireContext())
+        setupSendButton()
         setupRecyclerView()
-        binding.messageText.requestFocus()
     }
 
     private fun setupUI(context: Context) {
-        initToolbar()
-        initBackground(context)
-        binding.toolbar.title = "Gemini Pro"
-    }
-
-    private fun initToolbar() {
         binding.toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()
         }
         binding.toolbar.setOnMenuItemClickListener {
-
             if (it.itemId == R.id.clear) {
                 conversationAdapter.clear()
                 binding.recyclerview.invalidate()
                 return@setOnMenuItemClickListener false
             }
-
             true
         }
+
+        val shapeAppearance = ShapeAppearanceModel.builder().setAllCornerSizes(context.getDip(24f)).build()
+        val shapeDrawable = MaterialShapeDrawable(shapeAppearance).apply {
+            fillColor = ColorStateList.valueOf(ElevationColors.getSurfaceColor(context, 4f))
+        }
+        binding.chatLayout.background = shapeDrawable
+        binding.toolbar.background = shapeDrawable
     }
 
-    private fun setOnClickListeners() {
+    private fun setupSendButton() {
         binding.sendMessageButtonIcon.setOnClickListener {
             val message = binding.messageText.text.toString().trim()
             if (message.isEmpty()) {
@@ -101,31 +100,11 @@ class ChatFragment : BaseBindingFragment<FragmentChatBinding>() {
                     parent: RecyclerView,
                     state: RecyclerView.State
                 ) {
-                    val verticalOffset = 8.dp
+                    val verticalOffset = view.context.getDip(8f)
                     outRect.top = verticalOffset
                     outRect.bottom = verticalOffset
                 }
             })
         }
     }
-
-    private fun initBackground(context: Context) {
-        val shapeAppearance = ShapeAppearanceModel.builder().setAllCornerSizes(context.getDip(24f)).build()
-        val shapeDrawable = MaterialShapeDrawable(shapeAppearance).apply {
-            initializeElevationOverlay(context)
-            fillColor = ColorStateList.valueOf(
-                MaterialColors.getColor(
-                    context,
-                    com.google.android.material.R.attr.colorSurface,
-                    0
-                )
-            )
-            elevation = 6f
-        }
-        binding.chatLayout.background = shapeDrawable
-        binding.toolbar.background = shapeDrawable
-    }
 }
-
-private val Int.dp: Int
-    get() = (Resources.getSystem().displayMetrics.density * this + 0.5f).toInt()

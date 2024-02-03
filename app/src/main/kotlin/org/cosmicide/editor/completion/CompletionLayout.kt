@@ -8,7 +8,6 @@
 package org.cosmicide.editor.completion
 
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.ViewGroup
@@ -17,6 +16,7 @@ import io.github.rosemoe.sora.widget.component.DefaultCompletionLayout
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
 import org.cosmicide.App
 import org.cosmicide.common.Prefs
+import org.cosmicide.extension.getDip
 
 class CustomCompletionLayout : DefaultCompletionLayout() {
 
@@ -29,29 +29,12 @@ class CustomCompletionLayout : DefaultCompletionLayout() {
         val backgroundDrawable = completionListParent.background as? GradientDrawable
             ?: throw IllegalArgumentException("Completion list parent view background is null or not a GradientDrawable")
 
-        backgroundDrawable.setStroke(
-            1f.dpToPx(),
-            requireNotNull(colorScheme.getColor(EditorColorScheme.COMPLETION_WND_CORNER))
-        )
-
-
-        val color = when (App.instance.get()!!.getTheme(Prefs.appTheme)) {
-            AppCompatDelegate.MODE_NIGHT_YES -> "#1F1F1F"
-            AppCompatDelegate.MODE_NIGHT_NO -> "#F5F5F5"
-            else -> {
-                when (completionList.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-                    Configuration.UI_MODE_NIGHT_YES -> "#1F1F1F"
-                    else -> "#F5F5F5"
-                }
-            }
+        backgroundDrawable.apply {
+            setColor(colorScheme.getColor(EditorColorScheme.COMPLETION_WND_BACKGROUND))
+            setStroke(
+                completionListParent.context.getDip(0.5f),
+                requireNotNull(colorScheme.getColor(EditorColorScheme.COMPLETION_WND_CORNER))
+            )
         }
-
-        completionListParent.setBackgroundColor(Color.parseColor(color))
-        backgroundDrawable.setColor(colorScheme.getColor(EditorColorScheme.COMPLETION_WND_BACKGROUND))
-    }
-
-    private fun Float.dpToPx(): Int {
-        val scale = Resources.getSystem().displayMetrics.density
-        return (this * scale + 0.5f).toInt()
     }
 }

@@ -25,8 +25,8 @@ class ProjectViewModel : ViewModel() {
     val projects: LiveData<List<Project>> = _projects
 
     fun loadProjects() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val projectsList = FileUtil.projectDir.listFiles { file -> file.isDirectory }
+        viewModelScope.launch {
+            _projects.value = FileUtil.projectDir.listFiles { file -> file.isDirectory }
                 ?.sortedByDescending { it.lastModified() }
                 ?.map {
                     if (File(it, "src/main/java").exists()) {
@@ -36,10 +36,6 @@ class ProjectViewModel : ViewModel() {
                     }
                 }
                 ?: emptyList()
-
-            withContext(Dispatchers.Main) {
-                _projects.value = projectsList
-            }
         }
     }
 

@@ -24,6 +24,7 @@ import org.cosmicide.project.Project
  * @property reporter The [BuildReporter] to report the build progress and status.
  */
 class Compiler(
+    private val context: Context,
     private val project: Project,
     private val reporter: BuildReporter
 ) {
@@ -46,9 +47,6 @@ class Compiler(
             CompilerCache.saveCache(JarTask(project))
         }
     }
-
-    private val context = App.instance.get()!!
-
 
     init {
         initializeCache(project)

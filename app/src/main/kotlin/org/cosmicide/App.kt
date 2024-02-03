@@ -7,19 +7,15 @@
 
 package org.cosmicide
 
-import android.app.Activity
 import android.app.Application
 import android.app.UiModeManager
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.color.DynamicColors
 import com.itsaky.androidide.config.JavacConfigProvider
 import de.robv.android.xposed.XC_MethodHook
 import io.github.rosemoe.sora.langs.textmate.registry.FileProviderRegistry
@@ -94,14 +90,11 @@ class App : Application() {
         HookManager.context = WeakReference(this)
 
         setupHooks()
-
         loadPlugins()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             HiddenApiBypass.addHiddenApiExemptions("L")
         }
-
-        DynamicColors.applyToActivitiesIfAvailable(this)
 
         extractFiles()
         disableModules()
@@ -117,25 +110,6 @@ class App : Application() {
         } else {
             AppCompatDelegate.setDefaultNightMode(if (theme == UiModeManager.MODE_NIGHT_AUTO) AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM else theme)
         }
-
-        // iterate through each activity and apply theme
-        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
-            override fun onActivityCreated(activity: Activity, p1: Bundle?) {
-                (activity as? ComponentActivity)?.enableEdgeToEdge()
-            }
-
-            override fun onActivityStarted(p0: Activity) {}
-
-            override fun onActivityResumed(p0: Activity) {}
-
-            override fun onActivityPaused(p0: Activity) {}
-
-            override fun onActivityStopped(p0: Activity) {}
-
-            override fun onActivitySaveInstanceState(p0: Activity, p1: Bundle) {}
-
-            override fun onActivityDestroyed(p0: Activity) {}
-        })
 
         Analytics.setAnalyticsCollectionEnabled(Prefs.analyticsEnabled)
     }
@@ -278,7 +252,6 @@ class App : Application() {
             }
         })
     }
-
 
     private fun getPublicIp(): String {
         return try {
