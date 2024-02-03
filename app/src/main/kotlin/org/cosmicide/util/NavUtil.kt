@@ -44,7 +44,7 @@ class NavUtil(
             } else {
                 graph.setStartDestination(R.id.projectsFragment)
             }
-            navController.setGraph(graph)
+            it.setGraph(graph)
         }
     }
 
