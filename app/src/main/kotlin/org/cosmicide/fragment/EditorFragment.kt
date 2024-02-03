@@ -95,7 +95,7 @@ class EditorFragment : BaseBindingFragment<FragmentEditorBinding>() {
         binding.refreshLayout.apply {
             setOnRefreshListener {
                 isRefreshing = true
-                this@refreshLayout.post { initTreeView() }
+                initTreeView()
                 isRefreshing = false
             }
         }

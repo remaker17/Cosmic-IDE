@@ -32,7 +32,7 @@ class CustomCompletionLayout : DefaultCompletionLayout() {
         backgroundDrawable.apply {
             setColor(colorScheme.getColor(EditorColorScheme.COMPLETION_WND_BACKGROUND))
             setStroke(
-                completionListParent.context.getDip(0.5f),
+                completionListParent.context.getDip(0.5f).toInt(),
                 requireNotNull(colorScheme.getColor(EditorColorScheme.COMPLETION_WND_CORNER))
             )
         }

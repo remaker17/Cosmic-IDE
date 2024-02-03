@@ -7,6 +7,7 @@
 
 package org.cosmicide.compile
 
+import android.content.Context
 import org.cosmicide.App
 import org.cosmicide.R
 import org.cosmicide.build.BuildReporter
@@ -55,7 +56,7 @@ class Compiler(
     /**
      * Compiles Kotlin and Java code and converts class files to dex format.
      */
-    fun compile(release: Boolean = false) {
+    fun compile(release: Boolean = false): Boolean {
         compileKotlinCode()
         compileJavaCode()
         convertClassFilesToDexFormat()
@@ -63,6 +64,7 @@ class Compiler(
             compileJar()
         }
         reporter.reportSuccess()
+        return true
     }
 
     /**

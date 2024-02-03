@@ -18,6 +18,7 @@ import kotlinx.coroutines.withContext
 import org.cosmicide.R
 import org.cosmicide.build.BuildReporter
 import org.cosmicide.build.BuildReportKind
+import org.cosmicide.adapter.CompileLogAdapter
 import org.cosmicide.common.BaseBindingFragment
 import org.cosmicide.compile.Compiler
 import org.cosmicide.databinding.FragmentCompileInfoBinding
@@ -29,7 +30,7 @@ import org.cosmicide.util.ProjectHandler
  */
 class CompileInfoFragment : BaseBindingFragment<FragmentCompileInfoBinding>() {
     private val project: Project? = ProjectHandler.getProject()
-    private val logs: List<LogItem> = emptyList()
+    private val logs: ArrayList<LogItem> = arrayList()
     private var compiler: Compiler? = null
     private var adapter: CompileLogAdapter? = null
 
@@ -39,16 +40,17 @@ class CompileInfoFragment : BaseBindingFragment<FragmentCompileInfoBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = CompileLogAdapter(logs)
-        compiler = Compiler(requireContext(), checkProject(project)) { report ->
+        compiler = Compiler(requireContext(), checkProject(project), BuildReporter { report ->
             if (report.message.isEmpty()) {
                 return@BuildReporter
             }
             binding.logList.post {
                 addLogItem(kind = report.kind, message = report.message);
             }
-        }
+        })
 
         binding.toolbar.apply {
+            title = context.getString(R.string.compiler)
             subtitle = project?.name
             setNavigationOnClickListener {
                 parentFragmentManager.popBackStack()
@@ -57,10 +59,11 @@ class CompileInfoFragment : BaseBindingFragment<FragmentCompileInfoBinding>() {
 
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                compiler?.compile()
-                if (reporter.buildSuccess) {
-                    withContext(Dispatchers.Main) {
-                        navigateToProjectOutputFragment()
+                compiler?.let {
+                    if (it.compile()) {
+                        withContext(Dispatchers.Main) {
+                            navigateToProjectOutputFragment()
+                        }
                     }
                 }
             } catch (e: Exception) {
@@ -71,6 +74,8 @@ class CompileInfoFragment : BaseBindingFragment<FragmentCompileInfoBinding>() {
                 }
             }
         }
+
+        binding.logList.setAdapter(adapter)
     }
 
     override fun onDestroyView() {
@@ -102,8 +107,8 @@ class CompileInfoFragment : BaseBindingFragment<FragmentCompileInfoBinding>() {
             )
         )
 
-        adapter.notifyItemInserted(logs.size())
-        binding.logList.smoothScrollToPosition(logs.size() - 1)
+        adapter.notifyItemInserted(logs.size)
+        binding.logList.smoothScrollToPosition(logs.size - 1)
     }
 
     data class LogItem(

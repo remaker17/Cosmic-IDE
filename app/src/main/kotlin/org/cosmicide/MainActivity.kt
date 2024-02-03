@@ -38,14 +38,19 @@ import rikka.shizuku.ShizukuProvider
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    var themeInt = 0
 
     companion object {
         const val REQUEST_CODE_SHIZUKU = 1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        themeInt = CommonUtils.getAccent(Prefs.appAccent)
+        setTheme(themeInt)
         installSplashScreen()
+
         super.onCreate(savedInstanceState)
+
         DynamicColors.applyToActivityIfAvailable(this)
         enableEdgeToEdge()
 

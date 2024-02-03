@@ -7,11 +7,13 @@
 
 package org.cosmicide.adapter
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import org.cosmicide.databinding.CompileLogItemBinding
 import org.cosmicide.fragment.CompileInfoFragment.LogItem
 
-class CompileLogAdapter(val logs: List<LogItem>) : RecyclerView.Adapter<CompileLogAdapter.LogsViewHolder>() {
+class CompileLogAdapter(val logs: ArrayList<LogItem>) : RecyclerView.Adapter<CompileLogAdapter.LogsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LogsViewHolder =
         LogsViewHolder(
@@ -19,7 +21,7 @@ class CompileLogAdapter(val logs: List<LogItem>) : RecyclerView.Adapter<CompileL
         )
 
     override fun onBindViewHolder(holder: LogsViewHolder, position: Int) {
-        LogItem log = logs[position]
+        val log = logs[position]
         holder.binding.log.text = "[{$log.kind}] $log.message"
     }
 

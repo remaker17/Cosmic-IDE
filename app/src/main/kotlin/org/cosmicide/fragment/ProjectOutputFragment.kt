@@ -18,9 +18,12 @@ import io.github.rosemoe.sora.langs.textmate.TextMateLanguage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.cosmicide.R
+import org.cosmicide.adapter.CompileLogAdapter
+import org.cosmicide.build.BuildReportKind
 import org.cosmicide.common.BaseBindingFragment
 import org.cosmicide.databinding.FragmentCompileInfoBinding
 import org.cosmicide.editor.EditorInputStream
+import org.cosmicide.fragment.CompileInfoFragment.LogItem
 import org.cosmicide.project.Project
 import org.cosmicide.rewrite.util.MultipleDexClassLoader
 import org.cosmicide.util.ProjectHandler
@@ -31,28 +34,36 @@ import java.lang.reflect.Modifier
 class ProjectOutputFragment : BaseBindingFragment<FragmentCompileInfoBinding>() {
     val project: Project = ProjectHandler.getProject()
         ?: throw IllegalStateException("No project set")
+    private var adapter: CompileLogAdapter? = null
+    private val logs: ArrayList<LogItem> = arrayList()
     var isRunning: Boolean = false
 
     override fun getViewBinding() = FragmentCompileInfoBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        adapter = CompileLogAdapter(logs)
+
         binding.toolbar.inflateMenu(R.menu.output_menu)
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.reload -> {
-                    val text = binding.infoEditor.text
                     if (isRunning) {
                         parentFragmentManager.commit {
                             replace(R.id.fragment_container, ProjectOutputFragment())
                             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                         }
                     }
-                    text.insert(text.cursor.rightLine, text.cursor.rightColumn, "--- Stopped ---\n")
+                    binding.logList.post {
+                        addLogItem(
+                            kind = BuildReportKind.OUTPUT,
+                            message = "--- Stopped ---"
+                        )
+                    }
                     checkClasses()
                     true
                 }
-
                 R.id.cancel -> {
                     parentFragmentManager.commit {
                         remove(this@ProjectOutputFragment)
@@ -60,17 +71,12 @@ class ProjectOutputFragment : BaseBindingFragment<FragmentCompileInfoBinding>() 
                     }
                     true
                 }
-
                 else -> false
             }
         }
 
-        binding.infoEditor.apply {
-            setEditorLanguage(TextMateLanguage.create("source.build", false))
-            isWordwrap = true
-        }
-
-        binding.toolbar.title = "Running ${project.name}"
+        binding.toolbar.title = "Running"
+        binding.toolbar.subtitle = project.name
         binding.toolbar.setNavigationOnClickListener {
             parentFragmentManager.commit {
                 remove(this@ProjectOutputFragment)
@@ -78,13 +84,31 @@ class ProjectOutputFragment : BaseBindingFragment<FragmentCompileInfoBinding>() 
             }
         }
 
-        binding.infoEditor.postDelayed(::checkClasses, 250)
+        binding.logList.setAdapter(adapter)
+        binding.logList.postDelayed(::checkClasses, 250)
+    }
+
+    private fun addLogItem(kind: BuildReportKind, message: String) {
+        logs.add(
+            LogItem(
+                kind = kind,
+                message = message
+            )
+        )
+
+        adapter.notifyItemInserted(logs.size)
+        binding.logList.smoothScrollToPosition(logs.size - 1)
     }
 
     fun checkClasses() {
         val dex = project.binDir.resolve("classes.dex")
         if (!dex.exists()) {
-            binding.infoEditor.setText("classes.dex not found")
+            binding.logList.post {
+                addLogItem(
+                    kind = BuildReportKind.ERROR,
+                    message = "classes.dex not found"
+                )
+            }
             return
         }
         val bufferedInputStream = dex.inputStream().buffered()
@@ -95,7 +119,12 @@ class ProjectOutputFragment : BaseBindingFragment<FragmentCompileInfoBinding>() 
         bufferedInputStream.close()
         val classes = dexFile.classes.map { it.type.substring(1, it.type.length - 1) }
         if (classes.isEmpty()) {
-            binding.infoEditor.setText("No classes found")
+            binding.logList.post {
+                addLogItem(
+                    kind = BuildReportKind.ERROR,
+                    message = "No classes found"
+                )
+            }
             return
         }
 
@@ -119,19 +148,17 @@ class ProjectOutputFragment : BaseBindingFragment<FragmentCompileInfoBinding>() 
     fun runClass(className: String) = lifecycleScope.launch(Dispatchers.IO) {
         val systemOut = PrintStream(object : OutputStream() {
             override fun write(p0: Int) {
-                val text = binding.infoEditor.text
-                lifecycleScope.launch {
-                    text.insert(
-                        text.lineCount - 1,
-                        text.getColumnCount(text.lineCount - 1),
-                        p0.toChar().toString()
+                binding.logList.post {
+                    addLogItem(
+                        kind = BuildReportKind.OUTPUT,
+                        message = p0.toChar().toString()
                     )
                 }
             }
         })
         System.setOut(systemOut)
         System.setErr(systemOut)
-        System.setIn(EditorInputStream(binding.infoEditor))
+        // System.setIn(EditorInputStream(binding.logList))
 
         val loader = MultipleDexClassLoader(classLoader = javaClass.classLoader!!)
 
@@ -171,7 +198,7 @@ class ProjectOutputFragment : BaseBindingFragment<FragmentCompileInfoBinding>() 
             System.err.println("Error loading class: ${e.message}")
         }.also {
             systemOut.close()
-            System.`in`.close()
+            // System.`in`.close()
             isRunning = false
         }
     }

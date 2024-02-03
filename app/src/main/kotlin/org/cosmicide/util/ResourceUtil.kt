@@ -9,14 +9,18 @@ package org.cosmicide.util
 
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
-import org.cosmicide.rewrite.fragment.InstallResourcesFragment
-import org.cosmicide.rewrite.fragment.ProjectsFragment
+import org.cosmicide.fragment.InstallResourcesFragment
+import org.cosmicide.fragment.ProjectsFragment
 import org.cosmicide.rewrite.util.FileUtil
 
 object ResourceUtil {
-    private val resources = arrayOf("index.json")
+    val resources = arrayOf("index.json")
 
-    private fun missingResources(): List<String> {
+    private fun hasMissingResources(): Boolean {
+        return missingResources().isNotEmpty()
+    }
+
+    fun missingResources(): List<String> {
         val missing = mutableListOf<String>()
         for (resource in resources) {
             val file = FileUtil.dataDir.resolve(resource)
@@ -27,11 +31,7 @@ object ResourceUtil {
         return missing
     }
 
-    private fun hasMissingResources(): Boolean {
-        return missingResources().isNotEmpty()
-    }
-
-    fun checkForMissingResources(fragmentManager: FragmentManager, containerId: Int) {
+    fun checkForMissingResources(fragmentManager: FragmentManager, fragmentContainerId: Int) {
         val fragment = if (hasMissingResources()) {
             InstallResourcesFragment()
         } else {
@@ -39,7 +39,7 @@ object ResourceUtil {
         }
 
         fragmentManager.commit {
-            replace(containerId, fragment)
+            replace(fragmentContainerId, fragment)
         }
     }
 }

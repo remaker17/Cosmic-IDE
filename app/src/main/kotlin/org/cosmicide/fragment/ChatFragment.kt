@@ -100,7 +100,7 @@ class ChatFragment : BaseBindingFragment<FragmentChatBinding>() {
                     parent: RecyclerView,
                     state: RecyclerView.State
                 ) {
-                    val verticalOffset = view.context.getDip(8f)
+                    val verticalOffset = view.context.getDip(8f).toInt()
                     outRect.top = verticalOffset
                     outRect.bottom = verticalOffset
                 }

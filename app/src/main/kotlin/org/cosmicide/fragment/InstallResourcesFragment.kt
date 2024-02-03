@@ -36,7 +36,7 @@ class InstallResourcesFragment : BaseBindingFragment<InstallResourcesFragmentBin
             binding.installResourcesProgressText.visibility = View.VISIBLE
 
             lifecycleScope.launch(Dispatchers.IO) {
-                for (res in ResourceUtil.missingResources) {
+                for (res in ResourceUtil.missingResources()) {
                     withContext(Dispatchers.Main) {
                         binding.installResourcesText.text = "Preparing to download resource $res"
                         binding.installResourcesProgress.progress = 0
