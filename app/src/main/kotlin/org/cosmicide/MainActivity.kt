@@ -20,13 +20,13 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController.OnDestinationChangedListener
 import com.google.android.material.color.DynamicColors
 import kotlinx.coroutines.launch
 import org.cosmicide.common.Prefs
 import org.cosmicide.databinding.ActivityMainBinding
-import org.cosmicide.fragment.InstallResourcesFragment
-import org.cosmicide.fragment.ProjectFragment
 import org.cosmicide.util.CommonUtils
+import org.cosmicide.util.NavUtil
 import org.cosmicide.util.ResourceUtil
 import org.cosmicide.util.ShizukuUtil
 import org.cosmicide.util.awaitBinderReceived
@@ -38,6 +38,8 @@ import rikka.shizuku.ShizukuProvider
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navUtil: NavUtil
+
     var themeInt = 0
 
     companion object {
@@ -47,7 +49,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         themeInt = CommonUtils.getAccent(Prefs.appAccent)
         setTheme(themeInt)
-        installSplashScreen()
+        // temporarily removed due to numerous complaints
+        // about the app taking a long time to load
+        // installSplashScreen()
 
         super.onCreate(savedInstanceState)
 
@@ -57,10 +61,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(applyBottomInset(binding.root))
 
-        ResourceUtil.checkForMissingResources(
-            fragmentManager = supportFragmentManager,
-            fragmentContainerId = binding.fragmentContainer.id
-        )
+        navUtil = NavUtil(this, OnDestinationChangedListener { controller, dest, args ->
+            // nothing for now
+        }, Prefs.prefs, "MainActivity").also {
+            it.updateStartDestination()
+        }
 
         Shizuku.addRequestPermissionResultListener(listener)
 
@@ -80,8 +85,8 @@ class MainActivity : AppCompatActivity() {
     private fun applyBottomInset(view: View): View {
         return view.also {
             ViewCompat.setOnApplyWindowInsetsListener(it) { view, insets ->
-                val bottomInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()
-                        or WindowInsetsCompat.Type.ime()).bottom
+                val bottomInset = insets.getInsets(/* WindowInsetsCompat.Type.systemBars()
+                        or */ WindowInsetsCompat.Type.ime()).bottom
                 view.updatePadding(bottom = bottomInset)
 
                 insets
@@ -107,7 +112,7 @@ class MainActivity : AppCompatActivity() {
             return false
         } else {
             Shizuku.requestPermission(REQUEST_CODE_SHIZUKU)
-            return false;
+            return false
         }
     }
 

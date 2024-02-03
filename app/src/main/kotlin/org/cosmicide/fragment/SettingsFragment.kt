@@ -28,16 +28,13 @@ import org.cosmicide.fragment.settings.FormatterSettings
 import org.cosmicide.fragment.settings.GeminiSettings
 import org.cosmicide.fragment.settings.GitSettings
 import org.cosmicide.fragment.settings.PluginSettingsProvider
-import org.cosmicide.common.BaseBindingFragment
 
 /**
  * Fragment for displaying settings screen.
  */
-class SettingsFragment : BaseBindingFragment<FragmentSettingsBinding>() {
+class SettingsFragment : IdeFragment<FragmentSettingsBinding>(FragmentSettingsBinding::inflate) {
     private lateinit var preferencesAdapter: PreferencesAdapter
     override var isBackHandled = true
-
-    override fun getViewBinding() = FragmentSettingsBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,7 +123,7 @@ class SettingsFragment : BaseBindingFragment<FragmentSettingsBinding>() {
                 ChatProvider.regenerateModel()
             }
             if (!preferencesAdapter.goBack()) {
-                parentFragmentManager.popBackStack()
+                activity.navUtil.navigateUp()
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -141,7 +138,7 @@ class SettingsFragment : BaseBindingFragment<FragmentSettingsBinding>() {
                     }
                     if (!preferencesAdapter.goBack()) {
                         isEnabled = false
-                        parentFragmentManager.popBackStack()
+                        activity.navUtil.navigateUp()
                     }
                 }
             })

@@ -1,0 +1,132 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_main"
+    app:startDestination="@id/installResourcesFragment">
+
+    <action
+        android:id="@+id/action_global_install_resources_fragment"
+        app:destination="@id/installResourcesFragment" />
+
+    <action
+        android:id="@+id/action_global_projects_fragment"
+        app:destination="@id/projectsFragment" />
+
+    <fragment
+        android:id="@+id/installResourcesFragment"
+        android:name="org.cosmicide.fragment.InstallResourcesFragment"
+        android:label="InstallResourcesFragment"
+        tools:layout="@layout/install_resources_fragment">
+
+        <action
+            android:id="@+id/action_installResourcesFragment_to_projectsFragment"
+            app:destination="@id/projectsFragment"
+            app:popUpTo="@id/installResourcesFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/projectsFragment"
+        android:name="org.cosmicide.fragment.ProjectsFragment"
+        android:label="ProjectsFragment"
+        tools:layout="@layout/fragment_projects">
+
+        <action
+            android:id="@+id/action_projectsFragment_to_newProjectFragment"
+            app:destination="@id/newProjectFragment" />
+
+        <action
+            android:id="@+id/action_projectsFragment_to_editorFragment"
+            app:destination="@id/editorFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/newProjectFragment"
+        android:name="org.cosmicide.fragment.NewProjectFragment"
+        android:label="NewProjectFragment"
+        tools:layout="@layout/fragment_new_project">
+
+        <action
+            android:id="@+id/action_newProjectFragment_to_editorFragment"
+            app:destination="@id/editorFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editorFragment"
+        android:name="org.cosmicide.fragment.EditorFragment"
+        android:label="EditorFragment"
+        tools:layout="@layout/fragment_editor">
+
+        <action
+            android:id="@+id/action_editorFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+
+        <action
+            android:id="@+id/action_editorFragment_to_gitFragment"
+            app:destination="@id/gitFragment" />
+
+        <action
+            android:id="@+id/action_editorFragment_to_compileInfoFragment"
+            app:destination="@id/compileInfoFragment" />
+
+        <action
+            android:id="@+id/action_editorFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/compileInfoFragment"
+        android:name="org.cosmicide.fragment.CompileInfoFragment"
+        android:label="CompileInfoFragment"
+        tools:layout="@layout/fragment_compile_info">
+
+        <action
+            android:id="@+id/action_compileInfoFragment_to_projectOutputFragment"
+            app:destination="@id/projectOutputFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/projectOutputFragment"
+        android:name="org.cosmicide.fragment.ProjectOutputFragment"
+        android:label="ProjectOutputFragment"
+        tools:layout="@layout/fragment_compile_info" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="org.cosmicide.fragment.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings">
+
+        <action
+            android:id="@+id/action_settingsFragment_to_pluginListFragment"
+            app:destination="@id/pluginListFragment" />
+
+        <action
+            android:id="@+id/action_settingsFragment_to_pluginsFragment"
+            app:destination="@id/pluginsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/pluginListFragment"
+        android:name="org.cosmicide.fragment.PluginListFragment"
+        android:label="PluginListFragment" />
+
+    <fragment
+        android:id="@+id/pluginsFragment"
+        android:name="org.cosmicide.fragment.PluginsFragment"
+        android:label="PluginsFragment" />
+
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="org.cosmicide.fragment.ChatFragment"
+        android:label="ChatFragment"
+        tools:layout="@layout/fragment_chat">
+    </fragment>
+
+    <fragment
+        android:id="@+id/gitFragment"
+        android:name="org.cosmicide.fragment.GitFragment"
+        android:label="GitFragment"
+        tools:layout="@layout/fragment_git">
+    </fragment>
+</navigation>

@@ -21,7 +21,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.cosmicide.adapter.AvailablePluginAdapter
 import org.cosmicide.adapter.PluginAdapter
-import org.cosmicide.common.BaseBindingFragment
 import org.cosmicide.common.Prefs
 import org.cosmicide.databinding.FragmentPluginListBinding
 import org.cosmicide.databinding.PluginInfoBinding
@@ -31,15 +30,13 @@ import org.cosmicide.util.CommonUtils
 import org.cosmicide.util.CommonUtils.showSnackbarError
 import java.net.URL
 
-class PluginListFragment : BaseBindingFragment<FragmentPluginListBinding>() {
-
-    override fun getViewBinding() = FragmentPluginListBinding.inflate(layoutInflater)
+class PluginListFragment : IdeFragment<FragmentPluginListBinding>(FragmentPluginListBinding::inflate) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbar.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack()
+            activity.navUtil.navigateUp()
         }
 
         binding.pluginsList.apply {

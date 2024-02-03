@@ -21,8 +21,6 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat.*
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -39,6 +37,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import org.cosmicide.BuildConfig
 import org.cosmicide.R
+import org.cosmicide.NavigationMainDirections
 import org.cosmicide.extension.copyToClipboard
 import org.cosmicide.fragment.InstallResourcesFragment
 import org.cosmicide.common.Analytics
@@ -46,6 +45,7 @@ import org.cosmicide.common.Prefs
 import org.cosmicide.rewrite.util.FileUtil
 import org.cosmicide.util.CommonUtils.isShizukuGranted
 import org.cosmicide.util.ResourceUtil
+import org.cosmicide.util.ShizukuUtil
 import rikka.shizuku.Shizuku
 import rikka.shizuku.ShizukuRemoteProcess
 
@@ -185,7 +185,7 @@ class AboutSettings(private val activity: FragmentActivity) : SettingsProvider {
                 }
             }
 
-            val isShizukuGranted = activity.isShizukuGranted()
+            val isShizukuGranted = ShizukuUtil.isReady // activity.isShizukuGranted()
 
             pref("rish") {
                 title = "Rish"
@@ -236,9 +236,8 @@ class AboutSettings(private val activity: FragmentActivity) : SettingsProvider {
                         withContext(Dispatchers.Main) {
                             Toast.makeText(activity, "Cache cleared", Toast.LENGTH_LONG).show()
 
-                            activity.supportFragmentManager.commit {
-                                replace(R.id.fragment_container, InstallResourcesFragment())
-                                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                            activity.navUtil.navigateFragment{
+                                NavigationMainDirections.actionGlobalInstallResourcesFragment()
                             }
                         }
                     }

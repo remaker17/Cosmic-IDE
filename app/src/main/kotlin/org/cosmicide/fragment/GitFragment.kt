@@ -31,29 +31,21 @@ import org.cosmicide.adapter.StagingAdapter
 import org.cosmicide.databinding.FragmentGitBinding
 import org.cosmicide.databinding.GitCommandBinding
 import org.cosmicide.common.Analytics
-import org.cosmicide.common.BaseBindingFragment
 import org.cosmicide.common.Prefs
 import org.cosmicide.util.ProjectHandler
 import java.io.OutputStream
 import java.io.OutputStreamWriter
 import java.io.PrintStream
 
-class GitFragment : BaseBindingFragment<FragmentGitBinding>() {
-
+class GitFragment : IdeFragment<FragmentGitBinding>(FragmentGitBinding::inflate) {
     private lateinit var repository: Repository
-
-    override fun getViewBinding() = FragmentGitBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupUI()
-    }
-
-    private fun setupUI() {
         val root = ProjectHandler.getProject()!!.root
 
         binding.toolbar.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack()
+            activity.navUtil.navigateUp()
         }
 
         binding.recyclerview.apply {
@@ -83,7 +75,7 @@ class GitFragment : BaseBindingFragment<FragmentGitBinding>() {
                         }
                     }
                 }.setNegativeButton("No") { _, _ ->
-                    parentFragmentManager.popBackStack()
+                    activity.navUtil.navigateUp()
                 }.show()
         }
     }
@@ -93,11 +85,10 @@ class GitFragment : BaseBindingFragment<FragmentGitBinding>() {
             MaterialAlertDialogBuilder(requireContext()).setTitle("Git username or email not set")
                 .setMessage("Do you want to set it now?").setCancelable(false)
                 .setPositiveButton("Yes") { _, _ ->
-                    parentFragmentManager.popBackStack()
-                    parentFragmentManager.commit {
-                        replace(R.id.fragment_container, SettingsFragment()).addToBackStack(null)
-                        setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    }
+                    activity.navUtil.navigateUp()
+                    activity.navUtil.navigateFragment(
+                        GitFragmentDirections.actionGitFragmentToSettingsFragment()
+                    )
                 }.setNegativeButton("No") { _, _ ->
                     parentFragmentManager.popBackStack()
                 }.show()

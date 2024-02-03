@@ -27,14 +27,10 @@ import org.cosmicide.adapter.ConversationAdapter
 import org.cosmicide.chat.ChatProvider
 import org.cosmicide.databinding.FragmentChatBinding
 import org.cosmicide.extension.getDip
-import org.cosmicide.common.BaseBindingFragment
 import org.cosmicide.util.ElevationColors
 
-class ChatFragment : BaseBindingFragment<FragmentChatBinding>() {
-
+class ChatFragment : IdeFragment<FragmentChatBinding>(FragmentChatBinding::inflate) {
     private val conversationAdapter = ConversationAdapter()
-
-    override fun getViewBinding() = FragmentChatBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,7 +41,7 @@ class ChatFragment : BaseBindingFragment<FragmentChatBinding>() {
 
     private fun setupUI(context: Context) {
         binding.toolbar.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack()
+            activity.navUtil.navigateUp()
         }
         binding.toolbar.setOnMenuItemClickListener {
             if (it.itemId == R.id.clear) {

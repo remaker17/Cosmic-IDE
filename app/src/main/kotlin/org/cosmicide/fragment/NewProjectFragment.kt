@@ -10,28 +10,25 @@ package org.cosmicide.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
 import com.google.android.material.snackbar.Snackbar
 import org.cosmicide.R
-import org.cosmicide.common.BaseBindingFragment
 import org.cosmicide.databinding.FragmentNewProjectBinding
 import org.cosmicide.model.ProjectViewModel
 import org.cosmicide.project.Language
 import org.cosmicide.project.Project
 import org.cosmicide.rewrite.util.FileUtil
+import org.cosmicide.util.ProjectHandler
 import java.io.File
 import java.io.IOException
 
-class NewProjectFragment : BaseBindingFragment<FragmentNewProjectBinding>() {
+class NewProjectFragment : IdeFragment<FragmentNewProjectBinding>(FragmentNewProjectBinding::inflate) {
     private val viewModel: ProjectViewModel by activityViewModels()
-
-    override fun getViewBinding() = FragmentNewProjectBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbar.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack()
+            activity.navUtil.navigateUp()
         }
 
         binding.btnCreate.setOnClickListener {
@@ -63,13 +60,8 @@ class NewProjectFragment : BaseBindingFragment<FragmentNewProjectBinding>() {
                 else -> Language.Java
             }
 
-            val success = createProject(language, projectName, packageName)
-
-            if (success) {
-                parentFragmentManager.commit {
-                    remove(this@NewProjectFragment)
-                    setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                }
+            if (createProject(language, projectName, packageName)) {
+                activity.navUtil.navigateUp()
             }
         }
     }
@@ -101,10 +93,10 @@ class NewProjectFragment : BaseBindingFragment<FragmentNewProjectBinding>() {
     }
 
     private fun navigateToEditorFragment(project: Project) {
-        parentFragmentManager.commit {
-            replace(R.id.fragment_container, EditorFragment.newInstance(project))
-            addToBackStack(null)
-        }
+        ProjectHandler.setProject(project)
+        activity.navUtil.navigateFragment(
+            NewProjectFragmentDirections.actionNewProjectFragmentToEditorFragment()
+        )
     }
 
     private fun File.createMainFile(language: Language, packageName: String) {

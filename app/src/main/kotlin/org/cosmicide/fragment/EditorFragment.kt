@@ -39,7 +39,6 @@ import org.cosmicide.R
 import org.cosmicide.adapter.EditorAdapter
 import org.cosmicide.adapter.NavAdapter
 import org.cosmicide.build.dex.D8Task
-import org.cosmicide.common.BaseBindingFragment
 import org.cosmicide.common.Prefs
 import org.cosmicide.databinding.FragmentEditorBinding
 import org.cosmicide.databinding.NavigationElementsBinding
@@ -61,21 +60,18 @@ import java.io.File
 import java.io.OutputStream
 import java.io.PrintStream
 
-class EditorFragment : BaseBindingFragment<FragmentEditorBinding>() {
+class EditorFragment : IdeFragment<FragmentEditorBinding>(FragmentEditorBinding::inflate) {
     private lateinit var fileIndex: FileIndex
     private val fileViewModel by activityViewModels<FileViewModel>()
     private lateinit var editorAdapter: EditorAdapter
-    private val project by lazy { requireArguments().getSerializable("project") as Project }
+    private val project by lazy { ProjectHandler.getProject() }
 
     override var isBackHandled = true
-
-    override fun getViewBinding() = FragmentEditorBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         fileIndex = FileIndex(project)
-        ProjectHandler.setProject(project)
 
         configureToolbar()
         initViewModelListeners()
@@ -120,7 +116,8 @@ class EditorFragment : BaseBindingFragment<FragmentEditorBinding>() {
             }
         })
 
-        requireActivity().onBackPressedDispatcher.addCallback(
+        // todo: implement onBackPressed on IdeFragment
+        activity.onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -137,7 +134,7 @@ class EditorFragment : BaseBindingFragment<FragmentEditorBinding>() {
 
                             fileViewModel.files.removeObservers(viewLifecycleOwner)
                             fileViewModel.removeAll()
-                            parentFragmentManager.popBackStack()
+                            activity.navUtil.navigateUp()
                         }
                 }
             }
@@ -193,7 +190,6 @@ class EditorFragment : BaseBindingFragment<FragmentEditorBinding>() {
         }
     }
 
-
     private fun handleFilesUpdate(files: List<File>) {
         binding.apply {
             if (files.isEmpty()) {
@@ -223,7 +219,6 @@ class EditorFragment : BaseBindingFragment<FragmentEditorBinding>() {
         fileViewModel.currentPosition.removeObservers(viewLifecycleOwner)
         super.onDestroyView()
     }
-
 
     fun getCurrentFragment(): EditorAdapter.CodeEditorFragment? {
         val currentItemId = binding.pager.currentItem
@@ -358,18 +353,16 @@ class EditorFragment : BaseBindingFragment<FragmentEditorBinding>() {
                     }
 
                     R.id.action_chat -> {
-                        parentFragmentManager.commit {
-                            replace(R.id.fragment_container, ChatFragment())
-                            addToBackStack(null)
-                        }
+                        activity.navUtil.navigateFragment(
+                            EditorFragmentDirections.actionEditorFragmentToChatFragment()
+                        )
                         true
                     }
 
                     R.id.action_git -> {
-                        parentFragmentManager.commit {
-                            replace(R.id.fragment_container, GitFragment())
-                            addToBackStack(null)
-                        }
+                        activity.navUtil.navigateFragment(
+                            EditorFragmentDirections.actionEditorFragmentToGitFragment()
+                        )
                         true
                     }
 
@@ -577,17 +570,15 @@ class EditorFragment : BaseBindingFragment<FragmentEditorBinding>() {
     private fun navigateToCompileInfoFragment(clazz: String? = null) {
         ProjectHandler.clazz = clazz
         editorAdapter.saveAll()
-        parentFragmentManager.commit {
-            replace(R.id.fragment_container, CompileInfoFragment())
-            addToBackStack(null)
-        }
+        activity.navUtil.navigateFragment(
+            EditorFragmentDirections.actionEditorFragmentToCompileInfoFragment()
+        )
     }
 
     private fun navigateToSettingsFragment() {
-        parentFragmentManager.commit {
-            replace(R.id.fragment_container, SettingsFragment())
-            addToBackStack(null)
-        }
+        activity.navUtil.navigateFragment(
+            EditorFragmentDirections.actionEditorFragmentToSettingsFragment()
+        )
     }
 
     private fun showMenu(v: View, @MenuRes menuRes: Int, position: Int) {
@@ -741,14 +732,5 @@ class EditorFragment : BaseBindingFragment<FragmentEditorBinding>() {
             true
         }
         popup.show()
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(project: Project) = EditorFragment().apply {
-            arguments = Bundle().apply {
-                putSerializable("project", project)
-            }
-        }
     }
 }

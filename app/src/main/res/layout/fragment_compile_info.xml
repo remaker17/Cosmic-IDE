@@ -11,6 +11,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:transitionGroup="true"
     tools:context="org.cosmicide.fragment.CompileInfoFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -28,7 +29,6 @@
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:layout_marginTop="2dp"
             app:dividerInsetEnd="16dp"
             app:dividerInsetStart="16dp" />
     </com.google.android.material.appbar.AppBarLayout>

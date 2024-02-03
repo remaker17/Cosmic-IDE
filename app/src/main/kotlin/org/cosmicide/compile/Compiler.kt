@@ -16,6 +16,8 @@ import org.cosmicide.build.dex.D8Task
 import org.cosmicide.build.java.JarTask
 import org.cosmicide.build.java.JavaCompileTask
 import org.cosmicide.build.kotlin.KotlinCompiler
+import org.cosmicide.mapper.toExternalProject
+import org.cosmicide.project.ExternalProject
 import org.cosmicide.project.Project
 
 /**
@@ -41,7 +43,7 @@ class Compiler(
          * Initializes the cache of compiler instances.
          */
         @JvmStatic
-        fun initializeCache(project: Project) {
+        fun initializeCache(project: ExternalProject) {
             CompilerCache.saveCache(JavaCompileTask(project))
             CompilerCache.saveCache(KotlinCompiler(project))
             CompilerCache.saveCache(D8Task(project))
@@ -50,7 +52,7 @@ class Compiler(
     }
 
     init {
-        initializeCache(project)
+        initializeCache(project.toExternalProject())
     }
 
     /**
@@ -85,9 +87,10 @@ class Compiler(
 
             if (failure) {
                 reportOutput(context.getString(R.string.failed_to_compile, T::class.simpleName))
+                return
             }
 
-            reportInfo(context.getString(R.string.successfully_run, T::class.simpleName))
+            reportOutput(context.getString(R.string.successfully_run, T::class.simpleName))
         }
     }
 

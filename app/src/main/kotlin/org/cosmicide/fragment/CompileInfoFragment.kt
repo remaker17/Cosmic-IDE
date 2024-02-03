@@ -19,22 +19,21 @@ import org.cosmicide.R
 import org.cosmicide.build.BuildReporter
 import org.cosmicide.build.BuildReportKind
 import org.cosmicide.adapter.CompileLogAdapter
-import org.cosmicide.common.BaseBindingFragment
 import org.cosmicide.compile.Compiler
 import org.cosmicide.databinding.FragmentCompileInfoBinding
+import org.cosmicide.mapper.toExternalProject
+import org.cosmicide.project.ExternalProject
 import org.cosmicide.project.Project
 import org.cosmicide.util.ProjectHandler
 
 /**
  * A fragment for displaying information about the compilation process.
  */
-class CompileInfoFragment : BaseBindingFragment<FragmentCompileInfoBinding>() {
+class CompileInfoFragment : IdeFragment<FragmentCompileInfoBinding>(FragmentCompileInfoBinding::inflate) {
     private val project: Project? = ProjectHandler.getProject()
     private val logs = arrayListOf<LogItem>()
     private var compiler: Compiler? = null
     private var adapter: CompileLogAdapter? = null
-
-    override fun getViewBinding() = FragmentCompileInfoBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,7 +52,7 @@ class CompileInfoFragment : BaseBindingFragment<FragmentCompileInfoBinding>() {
             title = context.getString(R.string.compiler)
             subtitle = project?.name
             setNavigationOnClickListener {
-                parentFragmentManager.popBackStack()
+                activity.navUtil.navigateUp()
             }
         }
 
@@ -84,18 +83,17 @@ class CompileInfoFragment : BaseBindingFragment<FragmentCompileInfoBinding>() {
         compiler = null
     }
 
-    private fun checkProject(project: Project?): Project {
+    private fun checkProject(project: Project?): ExternalProject {
         if (project == null) {
             throw IllegalStateException("No project set")
         }
-        return project!!
+        return project!!.toExternalProject()
     }
 
     private fun navigateToProjectOutputFragment() {
-        parentFragmentManager.commit {
-            replace(R.id.fragment_container, ProjectOutputFragment())
-            addToBackStack(null)
-        }
+        activity.navUtil.navigateFragment(
+            CompileInfoFragmentDirections.actionCompileInfoFragmentToProjectOutputFragment()
+        )
     }
 
     private fun addLogItem(kind: BuildReportKind, message: String) {

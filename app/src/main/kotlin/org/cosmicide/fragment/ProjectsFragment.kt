@@ -23,7 +23,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -40,16 +39,16 @@ import org.cosmicide.databinding.FragmentProjectBinding
 import org.cosmicide.model.ProjectViewModel
 import org.cosmicide.project.Project
 import org.cosmicide.common.Analytics
-import org.cosmicide.common.BaseBindingFragment
 import org.cosmicide.common.Prefs
 import org.cosmicide.rewrite.util.FileUtil
 import org.cosmicide.rewrite.util.compressToZip
 import org.cosmicide.rewrite.util.unzip
 import org.cosmicide.util.CommonUtils
+import org.cosmicide.util.ProjectHandler
 import java.io.OutputStream
 import java.io.PrintWriter
 
-class ProjectFragment : BaseBindingFragment<FragmentProjectBinding>(),
+class ProjectsFragment : IdeFragment<FragmentProjectBinding>(FragmentProjectBinding::inflate),
     ProjectAdapter.OnProjectEventListener {
 
     private val projectAdapter = ProjectAdapter(this)
@@ -112,8 +111,6 @@ class ProjectFragment : BaseBindingFragment<FragmentProjectBinding>(),
             }
         }
 
-    override fun getViewBinding() = FragmentProjectBinding.inflate(layoutInflater)
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         askClientName()
@@ -126,11 +123,9 @@ class ProjectFragment : BaseBindingFragment<FragmentProjectBinding>(),
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.action_settings -> {
-                    parentFragmentManager.commit {
-                        replace(R.id.fragment_container, SettingsFragment())
-                        addToBackStack(null)
-                        setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    }
+                    activity.navUtil.navigateFragment(
+                        ProjectsFragmentDirections.actionProjectsFragmentToSettingsFragment()
+                    )
                     true
                 }
                 else -> false
@@ -258,9 +253,8 @@ class ProjectFragment : BaseBindingFragment<FragmentProjectBinding>(),
                 setTitle("Git Clone")
                 setMessage("Please enter your git username and api key in settings")
                 setPositiveButton("Ok") { _, _ ->
-                    parentFragmentManager.commit {
-                        replace(R.id.fragment_container, SettingsFragment())
-                        setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    activity.navUtil.navigateFragment{
+                        ProjectsFragmentDirections.actionProjectsFragmentToSettingsFragment()
                     }
                 }
                 show()
@@ -364,7 +358,6 @@ class ProjectFragment : BaseBindingFragment<FragmentProjectBinding>(),
         }
     }
 
-
     private fun askForAnalyticsPermission() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
         if (prefs.getBoolean("analytics_preference_asked", false)) return
@@ -392,20 +385,15 @@ class ProjectFragment : BaseBindingFragment<FragmentProjectBinding>(),
 
     private fun navigateToNewProjectFragment() {
         setOnClickListeners()
-        parentFragmentManager.commit {
-            replace(R.id.fragment_container, NewProjectFragment())
-            addToBackStack(null)
-        }
+        activity.navUtil.navigateFragment(
+            ProjectsFragmentDirections.actionProjectsFragmentToNewProjectFragment()
+        )
     }
 
     private fun navigateToEditorFragment(project: Project) {
-        parentFragmentManager.commit {
-            replace(R.id.fragment_container, EditorFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable("project", project)
-                }
-            })
-            addToBackStack(null)
-        }
+        ProjectHandler.setProject(project)
+        activity.navUtil.navigateFragment(
+            ProjectsFragmentDirections.actionProjectsFragmentToEditorFragment()
+        )
     }
 }

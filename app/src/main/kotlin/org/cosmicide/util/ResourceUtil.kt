@@ -7,10 +7,6 @@
 
 package org.cosmicide.util
 
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.commit
-import org.cosmicide.fragment.InstallResourcesFragment
-import org.cosmicide.fragment.ProjectFragment
 import org.cosmicide.rewrite.util.FileUtil
 
 object ResourceUtil {
@@ -29,17 +25,5 @@ object ResourceUtil {
             }
         }
         return missing
-    }
-
-    fun checkForMissingResources(fragmentManager: FragmentManager, fragmentContainerId: Int) {
-        val fragment = if (hasMissingResources()) {
-            InstallResourcesFragment()
-        } else {
-            ProjectFragment()
-        }
-
-        fragmentManager.commit {
-            replace(fragmentContainerId, fragment)
-        }
     }
 }

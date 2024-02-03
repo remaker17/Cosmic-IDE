@@ -50,7 +50,6 @@ android {
 
 dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.databinding:viewbinding:8.2.0")
 
     "prodImplementation"(projects.feature.appwrite)
     "devImplementation"("com.google.firebase:firebase-analytics-ktx:21.5.0")

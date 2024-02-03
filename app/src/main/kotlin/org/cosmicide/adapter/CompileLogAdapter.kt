@@ -22,7 +22,7 @@ class CompileLogAdapter(val logs: ArrayList<LogItem>) : RecyclerView.Adapter<Com
 
     override fun onBindViewHolder(holder: LogsViewHolder, position: Int) {
         val log = logs[position]
-        holder.binding.log.text = "[{$log.kind}] $log.message"
+        holder.binding.log.text = "[" + log.kind.toString() + "]" + log.message
     }
 
     override fun getItemCount() = logs.size

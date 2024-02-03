@@ -8,6 +8,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("androidx.navigation.safeargs")
+    id("kotlin-parcelize")
     id("dev.rikka.tools.materialthemebuilder")
     id("com.google.gms.google-services")
 }
@@ -174,6 +176,9 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
 
     implementation("com.github.haroldadmin:WhatTheStack:1.0.0-alpha04")
+
+    implementation("androidx.navigation:navigation-fragment:2.7.6")
+    implementation("androidx.navigation:navigation-ui:2.7.6")
 
     implementation("androidx.appcompat:appcompat:1.7.0-alpha03")
     implementation("androidx.constraintlayout:constraintlayout:2.2.0-alpha13")

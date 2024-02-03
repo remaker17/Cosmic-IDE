@@ -27,11 +27,13 @@
             app:title="@string/new_project" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- todo: implement constraint layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingHorizontal="16dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -66,14 +68,18 @@
             android:layout_marginTop="16dp"
             android:checked="true"
             android:text="@string/use_kotlin_template" />
-    </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_create"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:text="@string/create_project" />
+        <!-- workaround -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btn_create"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/create_project" />
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

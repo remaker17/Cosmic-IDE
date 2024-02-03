@@ -16,7 +16,7 @@ import java.io.Serializable
  * @property root The root directory of the project.
  * @property language The programming language used in the project.
  */
-data class Project(
+class ExternalProject(
     val root: File,
     val language: Language
 ) : Serializable {

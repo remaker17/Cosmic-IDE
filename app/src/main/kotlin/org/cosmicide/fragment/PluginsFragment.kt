@@ -16,21 +16,18 @@ import com.google.gson.reflect.TypeToken
 import org.cosmicide.adapter.PluginAdapter
 import org.cosmicide.databinding.FragmentPluginsBinding
 import org.cosmicide.databinding.PluginInfoBinding
-import org.cosmicide.common.BaseBindingFragment
 import org.cosmicide.rewrite.plugin.api.Plugin
 import org.cosmicide.rewrite.plugin.api.PluginLoader
 import org.cosmicide.rewrite.util.FileUtil
 import org.cosmicide.util.CommonUtils
 
-class PluginsFragment : BaseBindingFragment<FragmentPluginsBinding>() {
-
-    override fun getViewBinding() = FragmentPluginsBinding.inflate(layoutInflater)
+class PluginsFragment : IdeFragment<FragmentPluginsBinding>(FragmentPluginsBinding::inflate) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbar.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack()
+            activity.navUtil.navigateUp()
         }
 
         binding.pluginsList.apply {

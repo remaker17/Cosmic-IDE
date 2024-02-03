@@ -5,7 +5,7 @@
  * You should have received a copy of the GNU General Public License along with Cosmic IDE. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.cosmicide.util
+package org.cosmicide.extension
 
 import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 

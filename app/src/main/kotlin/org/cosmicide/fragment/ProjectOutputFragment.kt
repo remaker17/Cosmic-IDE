@@ -9,8 +9,6 @@ package org.cosmicide.fragment
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import com.android.tools.smali.dexlib2.Opcodes
 import com.android.tools.smali.dexlib2.dexbacked.DexBackedDexFile
@@ -20,7 +18,6 @@ import kotlinx.coroutines.launch
 import org.cosmicide.R
 import org.cosmicide.adapter.CompileLogAdapter
 import org.cosmicide.build.BuildReportKind
-import org.cosmicide.common.BaseBindingFragment
 import org.cosmicide.databinding.FragmentCompileInfoBinding
 import org.cosmicide.editor.EditorInputStream
 import org.cosmicide.fragment.CompileInfoFragment.LogItem
@@ -31,14 +28,12 @@ import java.io.OutputStream
 import java.io.PrintStream
 import java.lang.reflect.Modifier
 
-class ProjectOutputFragment : BaseBindingFragment<FragmentCompileInfoBinding>() {
+class ProjectOutputFragment : IdeFragment<FragmentCompileInfoBinding>(FragmentCompileInfoBinding::inflate) {
     val project: Project = ProjectHandler.getProject()
         ?: throw IllegalStateException("No project set")
     private var adapter: CompileLogAdapter? = null
     private val logs = arrayListOf<LogItem>()
     var isRunning: Boolean = false
-
-    override fun getViewBinding() = FragmentCompileInfoBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,10 +45,8 @@ class ProjectOutputFragment : BaseBindingFragment<FragmentCompileInfoBinding>() 
             when (it.itemId) {
                 R.id.reload -> {
                     if (isRunning) {
-                        parentFragmentManager.commit {
-                            replace(R.id.fragment_container, ProjectOutputFragment())
-                            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                        }
+                        activity.navUtil.navigateUp()
+                        return
                     }
                     binding.logList.post {
                         addLogItem(
@@ -65,10 +58,7 @@ class ProjectOutputFragment : BaseBindingFragment<FragmentCompileInfoBinding>() 
                     true
                 }
                 R.id.cancel -> {
-                    parentFragmentManager.commit {
-                        remove(this@ProjectOutputFragment)
-                        setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                    }
+                    activity.navUtil.navigateUp()
                     true
                 }
                 else -> false
@@ -78,7 +68,7 @@ class ProjectOutputFragment : BaseBindingFragment<FragmentCompileInfoBinding>() 
         binding.toolbar.title = "Running"
         binding.toolbar.subtitle = project.name
         binding.toolbar.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack()
+            activity.navUtil.navigateUp()
         }
 
         binding.logList.setAdapter(adapter)

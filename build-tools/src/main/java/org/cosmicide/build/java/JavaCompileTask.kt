@@ -13,7 +13,7 @@ import org.cosmicide.build.Task
 import org.cosmicide.build.util.getSourceFiles
 import org.cosmicide.build.util.getSystemClasspath
 import org.cosmicide.common.Prefs
-import org.cosmicide.project.Project
+import org.cosmicide.project.ExternalProject
 import java.io.File
 import java.io.Writer
 import java.nio.file.Files
@@ -24,7 +24,7 @@ import javax.tools.JavaFileObject
 import javax.tools.SimpleJavaFileObject
 import javax.tools.StandardLocation
 
-class JavaCompileTask(val project: Project) : Task {
+class JavaCompileTask(val project: ExternalProject) : Task {
     val diagnostics = DiagnosticCollector<JavaFileObject>()
     val tool = JavacTool.create()
     val fileManager = tool.getStandardFileManager(diagnostics, null, null)
@@ -117,7 +117,7 @@ class JavaCompileTask(val project: Project) : Task {
         }
     }
 
-    fun getClasspath(project: Project): List<File> {
+    fun getClasspath(project: ExternalProject): List<File> {
         val classpath = mutableListOf(File(project.binDir, "classes"))
         val libDir = project.libDir
         if (libDir.exists() && libDir.isDirectory) {

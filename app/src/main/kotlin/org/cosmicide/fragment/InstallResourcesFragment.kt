@@ -17,15 +17,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.cosmicide.R
 import org.cosmicide.databinding.InstallResourcesFragmentBinding
-import org.cosmicide.common.BaseBindingFragment
 import org.cosmicide.rewrite.util.FileUtil
 import org.cosmicide.util.Download
 import org.cosmicide.util.ResourceUtil
 
-class InstallResourcesFragment : BaseBindingFragment<InstallResourcesFragmentBinding>() {
-
+class InstallResourcesFragment : IdeFragment<InstallResourcesFragmentBinding>(InstallResourcesFragmentBinding::inflate) {
     val rawUrl = "https://github.com/Cosmic-Ide/binaries/raw/main/"
-    override fun getViewBinding() = InstallResourcesFragmentBinding.inflate(layoutInflater)
 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,10 +47,9 @@ class InstallResourcesFragment : BaseBindingFragment<InstallResourcesFragmentBin
                     }
                 }
                 withContext(Dispatchers.Main) {
-                    parentFragmentManager.commit {
-                        replace(R.id.fragment_container, ProjectFragment())
-                        setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    }
+                    activity.navUtil.navigateFragment(
+                        InstallResourcesFragmentDirections.actionInstallResourcesFragmentToProjectsFragment()
+                    )
                 }
             }
         }

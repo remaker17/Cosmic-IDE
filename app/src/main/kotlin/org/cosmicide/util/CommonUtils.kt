@@ -84,9 +84,9 @@ object CommonUtils {
             return false
         }
         return if (Shizuku.isPreV11()) {
-            checkSelfPermission(ShizukuProvider.PERMISSION) == PackageManager.PERMISSION_GRANTED
+            false
         } else {
-            Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
+            ShizukuUtil.isReady && Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
         }
     }
 }
