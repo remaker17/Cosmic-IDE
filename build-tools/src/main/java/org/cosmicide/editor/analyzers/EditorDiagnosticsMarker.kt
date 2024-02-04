@@ -16,13 +16,13 @@ import io.github.rosemoe.sora.widget.CodeEditor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.cosmicide.project.ExternalProject
+import org.cosmicide.project.Project
 import java.io.File
 
 class EditorDiagnosticsMarker(
     val editor: CodeEditor,
     val file: File,
-    val project: ExternalProject
+    val project: Project
 ) : EventReceiver<ContentChangeEvent> {
 
     private val diagnostics = DiagnosticsContainer()

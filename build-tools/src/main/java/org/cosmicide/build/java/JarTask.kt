@@ -9,7 +9,7 @@ package org.cosmicide.build.java
 
 import org.cosmicide.build.BuildReporter
 import org.cosmicide.build.Task
-import org.cosmicide.project.ExternalProject
+import org.cosmicide.project.Project
 import java.io.File
 import java.util.jar.JarOutputStream
 import java.util.zip.ZipEntry
@@ -17,7 +17,7 @@ import java.util.zip.ZipEntry
 /**
  * A task that creates a JAR file containing all the class files in a directory.
  */
-class JarTask(val project: ExternalProject) : Task {
+class JarTask(val project: Project) : Task {
 
     override fun execute(reporter: BuildReporter) {
         val directory = project.binDir.resolve("classes")

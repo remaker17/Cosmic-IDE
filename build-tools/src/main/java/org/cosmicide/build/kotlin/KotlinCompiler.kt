@@ -12,7 +12,7 @@ import org.cosmicide.build.Task
 import org.cosmicide.build.util.getSourceFiles
 import org.cosmicide.build.util.getSystemClasspath
 import org.cosmicide.common.Prefs
-import org.cosmicide.project.ExternalProject
+import org.cosmicide.project.Project
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSourceLocation
@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.incremental.isJavaFile
 import org.jetbrains.kotlin.incremental.makeJvmIncrementally
 import java.io.File
 
-class KotlinCompiler(val project: ExternalProject) : Task {
+class KotlinCompiler(val project: Project) : Task {
 
     val args: K2JVMCompilerArguments by lazy {
         K2JVMCompilerArguments().apply {

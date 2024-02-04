@@ -28,8 +28,10 @@ class NavUtil(
     val tag: String
 ) {
     private var navController: NavController? = null
+    private lateinit var fragmentManager: FragmentManager
 
     init {
+        fragmentManager = mainActivity.supportFragmentManager
         val navHostFragment = fragmentManager.findFragmentById(R.id.main_nav_host) as NavHostFragment
         navController = navHostFragment.getNavController()
         navController.addOnDestinationChangedListener(destinationChangedListener)

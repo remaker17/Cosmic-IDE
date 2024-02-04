@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.cosmicide.R
 import org.cosmicide.adapter.ProjectAdapter
-import org.cosmicide.databinding.FragmentProjectBinding
+import org.cosmicide.databinding.FragmentProjectsBinding
 import org.cosmicide.model.ProjectViewModel
 import org.cosmicide.project.Project
 import org.cosmicide.common.Analytics
@@ -48,7 +48,7 @@ import org.cosmicide.util.ProjectHandler
 import java.io.OutputStream
 import java.io.PrintWriter
 
-class ProjectsFragment : IdeFragment<FragmentProjectBinding>(FragmentProjectBinding::inflate),
+class ProjectsFragment : IdeFragment<FragmentProjectsBinding>(FragmentProjectsBinding::inflate),
     ProjectAdapter.OnProjectEventListener {
 
     private val projectAdapter = ProjectAdapter(this)

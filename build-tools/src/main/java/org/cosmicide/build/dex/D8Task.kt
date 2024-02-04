@@ -15,7 +15,7 @@ import com.android.tools.r8.OutputMode
 import org.cosmicide.build.BuildReporter
 import org.cosmicide.build.Task
 import org.cosmicide.build.util.getSystemClasspath
-import org.cosmicide.project.ExternalProject
+import org.cosmicide.project.Project
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
@@ -27,7 +27,7 @@ import kotlin.io.path.nameWithoutExtension
  *
  * @property project The project to compile.
  */
-class D8Task(val project: ExternalProject) : Task {
+class D8Task(val project: Project) : Task {
 
     companion object {
         const val MIN_API_LEVEL = Build.VERSION_CODES.O

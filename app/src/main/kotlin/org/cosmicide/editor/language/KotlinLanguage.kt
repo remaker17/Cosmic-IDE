@@ -24,7 +24,6 @@ import io.github.rosemoe.sora.widget.CodeEditor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.cosmicide.mapper.toExternalProject
 import org.cosmicide.project.Project
 import org.cosmicide.common.Prefs
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
@@ -47,7 +46,7 @@ class KotlinLanguage(
     grammarRegistry,
     themeRegistry
 ) {
-    val kotlinEnvironment = KotlinEnvironment.get(project.toExternalProject())
+    val kotlinEnvironment = KotlinEnvironment.get(project)
     val container = DiagnosticsContainer()
 
     init {

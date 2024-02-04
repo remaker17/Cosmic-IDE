@@ -5,10 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import org.cosmicide.MainActivity
 
-class IdeFragment<T : ViewBinding> : BaseFragment {
+abstract class IdeFragment<T : ViewBinding> : Fragment {
 
   @Suppress("PropertyName")
   protected var _binding: T? = null

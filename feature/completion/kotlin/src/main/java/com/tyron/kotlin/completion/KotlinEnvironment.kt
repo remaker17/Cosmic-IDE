@@ -41,7 +41,7 @@ import io.github.rosemoe.sora.lang.completion.CompletionItemKind
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.cosmicide.project.ExternalProject
+import org.cosmicide.project.Project
 import org.cosmicide.common.Prefs
 import org.cosmicide.editor.EditorCompletionItem
 import org.cosmicide.rewrite.util.FileUtil
@@ -597,7 +597,7 @@ data class KotlinEnvironment(
             )
         }
 
-        fun get(module: ExternalProject): KotlinEnvironment {
+        fun get(module: Project): KotlinEnvironment {
             val jars = module.libDir.walk().filter { it.extension == "jar" }.toMutableList()
             jars.addAll(FileUtil.classpathDir.walk().filter { it.extension == "jar" })
             val environment = with(jars)

@@ -16,8 +16,7 @@ import androidx.preference.PreferenceManager
  * A utility object to access shared preferences easily.
  */
 object Prefs {
-
-    private lateinit var prefs: SharedPreferences
+    lateinit var prefs: SharedPreferences
 
     /**
      * Initializes shared preferences.

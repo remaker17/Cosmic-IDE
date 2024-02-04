@@ -38,7 +38,7 @@ import rikka.shizuku.ShizukuProvider
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var navUtil: NavUtil
+    lateinit var navUtil: NavUtil
 
     var themeInt = 0
 

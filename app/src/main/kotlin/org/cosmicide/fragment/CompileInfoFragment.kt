@@ -21,8 +21,6 @@ import org.cosmicide.build.BuildReportKind
 import org.cosmicide.adapter.CompileLogAdapter
 import org.cosmicide.compile.Compiler
 import org.cosmicide.databinding.FragmentCompileInfoBinding
-import org.cosmicide.mapper.toExternalProject
-import org.cosmicide.project.ExternalProject
 import org.cosmicide.project.Project
 import org.cosmicide.util.ProjectHandler
 
@@ -83,11 +81,11 @@ class CompileInfoFragment : IdeFragment<FragmentCompileInfoBinding>(FragmentComp
         compiler = null
     }
 
-    private fun checkProject(project: Project?): ExternalProject {
+    private fun checkProject(project: Project?): Project {
         if (project == null) {
             throw IllegalStateException("No project set")
         }
-        return project!!.toExternalProject()
+        return project!!
     }
 
     private fun navigateToProjectOutputFragment() {

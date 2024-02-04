@@ -12,7 +12,7 @@ import org.cosmicide.rewrite.util.FileUtil
 object ResourceUtil {
     val resources = arrayOf("index.json")
 
-    private fun hasMissingResources(): Boolean {
+    fun hasMissingResources(): Boolean {
         return missingResources().isNotEmpty()
     }
 

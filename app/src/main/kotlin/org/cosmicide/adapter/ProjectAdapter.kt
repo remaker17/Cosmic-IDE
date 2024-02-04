@@ -21,8 +21,8 @@ import kotlin.properties.Delegates
  *
  * @param listener Listener for handling user interactions with the items in the list.
  */
-class ProjectAdapter(private val listener: OnProjectEventListener) :
-    RecyclerView.Adapter<ProjectAdapter.ViewHolder>() {
+class ProjectsAdapter(private val listener: OnProjectEventListener) :
+    RecyclerView.Adapter<ProjectsAdapter.ViewHolder>() {
 
     /**
      * List of [Project] objects to be displayed in the [RecyclerView].

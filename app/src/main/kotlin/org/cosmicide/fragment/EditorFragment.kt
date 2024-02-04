@@ -170,22 +170,24 @@ class EditorFragment : IdeFragment<FragmentEditorBinding>(FragmentEditorBinding:
 
     private fun initTreeView() {
         binding.recyclerView.apply {
-            val nodes = TreeViewAdapter.merge(project.root)
-            layoutManager = LinearLayoutManager(context)
-            adapter = TreeViewAdapter(context, nodes).apply {
-                setOnItemClickListener(object : OnItemClickListener {
-                    override fun onItemClick(v: View, position: Int) {
-                        val file = nodes[position].value
-                        if (file.exists().not() || file.isDirectory) return
-                        if (file.isFile) {
-                            fileViewModel.addFile(file)
+            project?.let {
+                val nodes = TreeViewAdapter.merge(it.root)
+                layoutManager = LinearLayoutManager(context)
+                adapter = TreeViewAdapter(context, nodes).apply {
+                    setOnItemClickListener(object : OnItemClickListener {
+                        override fun onItemClick(v: View, position: Int) {
+                            val file = nodes[position].value
+                            if (file.exists().not() || file.isDirectory) return
+                            if (file.isFile) {
+                                fileViewModel.addFile(file)
+                            }
                         }
-                    }
 
-                    override fun onItemLongClick(v: View, position: Int) {
-                        showTreeViewMenu(v, nodes[position].value)
-                    }
-                })
+                        override fun onItemLongClick(v: View, position: Int) {
+                            showTreeViewMenu(v, nodes[position].value)
+                        }
+                    })
+                }
             }
         }
     }
@@ -229,7 +231,7 @@ class EditorFragment : IdeFragment<FragmentEditorBinding>(FragmentEditorBinding:
 
     private fun configureToolbar() {
         binding.toolbar.apply {
-            title = project.name
+            title = project.name ?: "Unknown"
             setNavigationOnClickListener {
                 editorAdapter.saveAll()
                 binding.drawer.open()
@@ -332,8 +334,10 @@ class EditorFragment : IdeFragment<FragmentEditorBinding>(FragmentEditorBinding:
                                             return@launch
                                         }
                                         try {
-                                            artifact.downloadArtifact(project.libDir)
-                                            sheet.dismiss()
+                                            project?.let {
+                                                artifact.downloadArtifact(it.libDir)
+                                                sheet.dismiss()
+                                            }
                                         } catch (e: Exception) {
                                             e.printStackTrace()
                                             withContext(Dispatchers.Main) {
@@ -377,9 +381,9 @@ class EditorFragment : IdeFragment<FragmentEditorBinding>(FragmentEditorBinding:
                             .setView(binding.root).setPositiveButton("Save") { _, _ ->
                                 binding.textInputLayout.hint = "Arguments"
                                 binding.textInputLayout.editText?.setText(
-                                    project.args.joinToString(
+                                    project?.args.joinToString(
                                         " "
-                                    )
+                                    ) ?: ""
                                 )
                                 val args = binding.textInputLayout.editText?.text.toString()
 
@@ -424,7 +428,7 @@ class EditorFragment : IdeFragment<FragmentEditorBinding>(FragmentEditorBinding:
                                     }
                                 }
                                 if (arg.isNotEmpty()) argList.add(arg)
-                                project.args = argList.filterNot { it.isBlank() }
+                                project?.args = argList.filterNot { it.isBlank() }
 
                             }.setNegativeButton("Cancel") { dialog, _ ->
                                 dialog.dismiss()
@@ -639,12 +643,14 @@ class EditorFragment : IdeFragment<FragmentEditorBinding>(FragmentEditorBinding:
                 R.id.execute -> {
                     editorAdapter.fragments.forEach { fragment -> fragment.save() }
                     getCurrentFragment()?.hideWindows()
-                    navigateToCompileInfoFragment(
-                        file.absolutePath.replace(
-                            project.srcDir.absolutePath + "/",
-                            ""
+                    project?.let {
+                        navigateToCompileInfoFragment(
+                            file.absolutePath.replace(
+                                it.srcDir.absolutePath + "/",
+                                ""
+                            )
                         )
-                    )
+                    }
                 }
                 R.id.create_kotlin_class -> {
                     val binding = TreeviewContextActionDialogItemBinding.inflate(layoutInflater)
