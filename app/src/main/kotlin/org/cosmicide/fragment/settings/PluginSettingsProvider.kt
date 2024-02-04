@@ -8,14 +8,12 @@
 package org.cosmicide.fragment.settings
 
 import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.commit
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.categoryHeader
 import de.Maxr1998.modernpreferences.helpers.editText
 import de.Maxr1998.modernpreferences.helpers.onClick
 import de.Maxr1998.modernpreferences.helpers.pref
+import org.cosmicide.MainActivity
 import org.cosmicide.R
 import org.cosmicide.fragment.PluginListFragment
 import org.cosmicide.fragment.PluginsFragment
@@ -24,7 +22,7 @@ import org.cosmicide.common.Prefs
 import org.cosmicide.rewrite.plugin.api.PluginLoader
 import org.cosmicide.util.PreferenceKeys
 
-class PluginSettingsProvider(private val activity: FragmentActivity) : SettingsProvider {
+class PluginSettingsProvider(private val activity: MainActivity) : SettingsProvider {
 
     override fun provideSettings(builder: PreferenceScreen.Builder) {
         builder.apply {

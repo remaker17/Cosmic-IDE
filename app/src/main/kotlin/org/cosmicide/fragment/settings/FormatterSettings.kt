@@ -8,15 +8,15 @@
 package org.cosmicide.fragment.settings
 
 import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.FragmentActivity
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.multiChoice
 import de.Maxr1998.modernpreferences.helpers.singleChoice
 import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
+import org.cosmicide.MainActivity
 import org.cosmicide.R
 import org.cosmicide.util.PreferenceKeys
 
-class FormatterSettings(private val activity: FragmentActivity) : SettingsProvider {
+class FormatterSettings(private val activity: MainActivity) : SettingsProvider {
 
     private val ktfmtStyles: Array<String>
         get() = activity.resources.getStringArray(R.array.ktfmt_styles)

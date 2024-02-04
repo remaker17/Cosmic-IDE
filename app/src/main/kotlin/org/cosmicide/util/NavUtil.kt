@@ -46,7 +46,7 @@ class NavUtil(
             } else {
                 graph.setStartDestination(R.id.projectsFragment)
             }
-            it.setGraph(graph)
+            it.graph = graph
         }
     }
 
@@ -76,8 +76,8 @@ class NavUtil(
 
     fun navigateUp() {
         if (navController == null) {
-            val navHostFragment = fragmentManager.findFragmentById(R.id.main_nav_host) as NavHostFragment
-            navController = navHostFragment.getNavController()
+            val navHostFragment: NavHostFragment = fragmentManager.findFragmentById(R.id.main_nav_host) as NavHostFragment
+            navController = navHostFragment.navController
         }
         navController!!.navigateUp()
     }

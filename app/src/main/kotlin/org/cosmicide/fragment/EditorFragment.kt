@@ -64,7 +64,7 @@ class EditorFragment : IdeFragment<FragmentEditorBinding>(FragmentEditorBinding:
     private lateinit var fileIndex: FileIndex
     private val fileViewModel by activityViewModels<FileViewModel>()
     private lateinit var editorAdapter: EditorAdapter
-    private val project by lazy { ProjectHandler.getProject() }
+    private val project by lazy { ProjectHandler.getProject()!! }
         ?: throw IllegalStateException("No project set")
 
     // override var isBackHandled = true

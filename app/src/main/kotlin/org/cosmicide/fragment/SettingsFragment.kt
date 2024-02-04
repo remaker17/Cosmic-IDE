@@ -44,14 +44,14 @@ class SettingsFragment : IdeFragment<FragmentSettingsBinding>(FragmentSettingsBi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val appearanceSettings = AppearanceSettings(requireActivity() as MainActivity)
-        val editorSettings = EditorSettings(requireActivity())
-        val formatterSettings = FormatterSettings(requireActivity())
-        val compilerSettings = CompilerSettings(requireActivity())
-        val pluginsSettings = PluginSettingsProvider(requireActivity())
+        val appearanceSettings = AppearanceSettings(activity)
+        val editorSettings = EditorSettings(activity)
+        val formatterSettings = FormatterSettings(activity)
+        val compilerSettings = CompilerSettings(activity)
+        val pluginsSettings = PluginSettingsProvider(activity)
         val gitSettings = GitSettings()
-        val aboutSettings = AboutSettings(requireActivity())
-        val geminiSettings = GeminiSettings(requireActivity())
+        val aboutSettings = AboutSettings(activity)
+        val geminiSettings = GeminiSettings(activity)
 
         var geminiScreen: PreferenceScreen? = null
 

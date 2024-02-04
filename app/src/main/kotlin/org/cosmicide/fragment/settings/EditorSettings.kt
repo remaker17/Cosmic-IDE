@@ -8,17 +8,17 @@
 package org.cosmicide.fragment.settings
 
 import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.FragmentActivity
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.editText
 import de.Maxr1998.modernpreferences.helpers.onCheckedChange
 import de.Maxr1998.modernpreferences.helpers.seekBar
 import de.Maxr1998.modernpreferences.helpers.switch
+import org.cosmicide.MainActivity
 import org.cosmicide.R
 import org.cosmicide.common.Analytics
 import org.cosmicide.util.PreferenceKeys
 
-class EditorSettings(private val activity: FragmentActivity) : SettingsProvider {
+class EditorSettings(private val activity: MainActivity) : SettingsProvider {
 
     override fun provideSettings(builder: PreferenceScreen.Builder) {
         builder.apply {

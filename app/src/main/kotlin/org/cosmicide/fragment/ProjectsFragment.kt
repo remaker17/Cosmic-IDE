@@ -253,9 +253,9 @@ class ProjectsFragment : IdeFragment<FragmentProjectsBinding>(FragmentProjectsBi
                 setTitle("Git Clone")
                 setMessage("Please enter your git username and api key in settings")
                 setPositiveButton("Ok") { _, _ ->
-                    activity.navUtil.navigateFragment{
+                    activity.navUtil.navigateFragment(
                         ProjectsFragmentDirections.actionProjectsFragmentToSettingsFragment()
-                    }
+                    )
                 }
                 show()
             }

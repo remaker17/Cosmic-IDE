@@ -8,18 +8,18 @@
 package org.cosmicide.fragment.settings
 
 import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.FragmentActivity
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.categoryHeader
 import de.Maxr1998.modernpreferences.helpers.editText
 import de.Maxr1998.modernpreferences.helpers.singleChoice
 import de.Maxr1998.modernpreferences.helpers.switch
 import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
+import org.cosmicide.MainActivity
 import org.cosmicide.R
 import org.cosmicide.util.PreferenceKeys
 import org.jetbrains.kotlin.config.LanguageVersion
 
-class CompilerSettings(private val activity: FragmentActivity) : SettingsProvider {
+class CompilerSettings(private val activity: MainActivity) : SettingsProvider {
 
     private val javaVersionValues: Array<String>
         get() = activity.resources.getStringArray(R.array.java_version_entries)

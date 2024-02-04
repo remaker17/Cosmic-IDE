@@ -19,7 +19,7 @@ import org.cosmicide.project.Project
 import org.cosmicide.rewrite.util.FileUtil
 import java.io.File
 
-class ProjectViewModel : ViewModel() {
+class ProjectsViewModel : ViewModel() {
 
     private val _projects = MutableLiveData<List<Project>>()
     val projects: LiveData<List<Project>> = _projects

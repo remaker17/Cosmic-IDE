@@ -8,16 +8,16 @@
 package org.cosmicide.fragment.settings
 
 import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.FragmentActivity
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.editText
 import de.Maxr1998.modernpreferences.helpers.seekBar
 import de.Maxr1998.modernpreferences.helpers.singleChoice
 import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
+import org.cosmicide.MainActivity
 import org.cosmicide.R
 import org.cosmicide.util.PreferenceKeys
 
-class GeminiSettings(private val activity: FragmentActivity) : SettingsProvider {
+class GeminiSettings(private val activity: MainActivity) : SettingsProvider {
 
     private val temperature: List<Float>
         get() = listOf(

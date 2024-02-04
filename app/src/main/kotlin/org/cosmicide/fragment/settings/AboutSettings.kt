@@ -20,7 +20,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat.*
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -36,6 +35,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import org.cosmicide.BuildConfig
+import org.cosmicide.MainActivity
 import org.cosmicide.R
 import org.cosmicide.NavigationMainDirections
 import org.cosmicide.extension.copyToClipboard
@@ -49,7 +49,7 @@ import org.cosmicide.util.ShizukuUtil
 import rikka.shizuku.Shizuku
 import rikka.shizuku.ShizukuRemoteProcess
 
-class AboutSettings(private val activity: FragmentActivity) : SettingsProvider {
+class AboutSettings(private val activity: MainActivity) : SettingsProvider {
     @SuppressLint("PrivateResource")
     override fun provideSettings(builder: PreferenceScreen.Builder) {
         builder.apply {

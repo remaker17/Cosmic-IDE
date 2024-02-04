@@ -22,7 +22,6 @@ import org.cosmicide.R
 import org.cosmicide.util.CommonUtils
 import org.cosmicide.util.PreferenceKeys
 
-
 class AppearanceSettings(private val activity: MainActivity) : SettingsProvider {
 
     private val themeValues: Array<String>
