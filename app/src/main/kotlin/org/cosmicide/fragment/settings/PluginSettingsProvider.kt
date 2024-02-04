@@ -35,9 +35,9 @@ class PluginSettingsProvider(private val activity: MainActivity) : SettingsProvi
                 title = "Available plugins"
                 summary = "View available plugins"
                 onClick {
-                    activity.navUtil.navigateFragment{
+                    activity.navUtil.navigateFragment(
                         SettingsFragmentDirections.actionSettingsFragmentToPluginListFragment()
-                    }
+                    )
                     true
                 }
             }
@@ -46,9 +46,9 @@ class PluginSettingsProvider(private val activity: MainActivity) : SettingsProvi
                 title = "Installed plugins"
                 summary = "View installed plugins"
                 onClick {
-                    activity.navUtil.navigateFragment{
+                    activity.navUtil.navigateFragment(
                         SettingsFragmentDirections.actionSettingsFragmentToPluginsFragment()
-                    }
+                    )
                     true
                 }
             }

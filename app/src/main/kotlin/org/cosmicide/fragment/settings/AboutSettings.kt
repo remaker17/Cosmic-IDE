@@ -236,9 +236,9 @@ class AboutSettings(private val activity: MainActivity) : SettingsProvider {
                         withContext(Dispatchers.Main) {
                             Toast.makeText(activity, "Cache cleared", Toast.LENGTH_LONG).show()
 
-                            activity.navUtil.navigateFragment{
+                            activity.navUtil.navigateFragment(
                                 NavigationMainDirections.actionGlobalInstallResourcesFragment()
-                            }
+                            )
                         }
                     }
                     true

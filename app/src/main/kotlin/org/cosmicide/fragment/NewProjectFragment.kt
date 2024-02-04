@@ -13,7 +13,7 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
 import org.cosmicide.R
 import org.cosmicide.databinding.FragmentNewProjectBinding
-import org.cosmicide.model.ProjectViewModel
+import org.cosmicide.model.ProjectsViewModel
 import org.cosmicide.project.Language
 import org.cosmicide.project.Project
 import org.cosmicide.rewrite.util.FileUtil
@@ -22,7 +22,7 @@ import java.io.File
 import java.io.IOException
 
 class NewProjectFragment : IdeFragment<FragmentNewProjectBinding>(FragmentNewProjectBinding::inflate) {
-    private val viewModel: ProjectViewModel by activityViewModels()
+    private val viewModel: ProjectsViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
