@@ -34,9 +34,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.cosmicide.R
-import org.cosmicide.adapter.ProjectAdapter
+import org.cosmicide.adapter.ProjectsAdapter
 import org.cosmicide.databinding.FragmentProjectsBinding
-import org.cosmicide.model.ProjectViewModel
+import org.cosmicide.model.ProjectsViewModel
 import org.cosmicide.project.Project
 import org.cosmicide.common.Analytics
 import org.cosmicide.common.Prefs
@@ -49,10 +49,10 @@ import java.io.OutputStream
 import java.io.PrintWriter
 
 class ProjectsFragment : IdeFragment<FragmentProjectsBinding>(FragmentProjectsBinding::inflate),
-    ProjectAdapter.OnProjectEventListener {
+    ProjectsAdapter.OnProjectEventListener {
 
-    private val projectAdapter = ProjectAdapter(this)
-    private val viewModel by activityViewModels<ProjectViewModel>()
+    private val projectsAdapter = ProjectsAdapter(this)
+    private val viewModel by activityViewModels<ProjectsViewModel>()
     private var project: Project? = null
 
     private val zipContract = registerForActivityResult(CreateDocument("application/zip")) { uri ->
@@ -117,7 +117,7 @@ class ProjectsFragment : IdeFragment<FragmentProjectsBinding>(FragmentProjectsBi
         askForAnalyticsPermission()
 
         setOnClickListeners()
-        binding.projectList.adapter = projectAdapter
+        binding.projectList.adapter = projectsAdapter
 
         observeViewModelProjects()
         binding.toolbar.setOnMenuItemClickListener {
@@ -225,7 +225,7 @@ class ProjectsFragment : IdeFragment<FragmentProjectsBinding>(FragmentProjectsBi
 
     private fun observeViewModelProjects() {
         viewModel.projects.observe(viewLifecycleOwner) { projects ->
-            projectAdapter.submitList(projects)
+            projectsAdapter.submitList(projects)
 
             if (projects.isEmpty() && binding.switcher.currentView != binding.noProjects) {
                 binding.switcher.showNext()

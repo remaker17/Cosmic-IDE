@@ -32,14 +32,14 @@ class NavUtil(
 
     init {
         fragmentManager = mainActivity.supportFragmentManager
-        val navHostFragment = fragmentManager.findFragmentById(R.id.main_nav_host) as NavHostFragment
-        navController = navHostFragment.getNavController()
-        navController.addOnDestinationChangedListener(destinationChangedListener)
+        val navHostFragment: NavHostFragment = fragmentManager.findFragmentById(R.id.main_nav_host) as NavHostFragment
+        navController = navHostFragment.navController
+        navController?.addOnDestinationChangedListener(destinationChangedListener)
     }
 
     fun updateStartDestination() {
         navController?.let {
-            val navInflater = it.getNavInflater()
+            val navInflater = it.navInflater
             val graph = navInflater.inflate(R.navigation.navigation_main)
             if (ResourceUtil.hasMissingResources()) {
                 graph.setStartDestination(R.id.installResourcesFragment)

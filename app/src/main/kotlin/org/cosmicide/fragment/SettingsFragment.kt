@@ -34,7 +34,7 @@ import org.cosmicide.fragment.settings.PluginSettingsProvider
  */
 class SettingsFragment : IdeFragment<FragmentSettingsBinding>(FragmentSettingsBinding::inflate) {
     private lateinit var preferencesAdapter: PreferencesAdapter
-    override var isBackHandled = true
+    // override var isBackHandled = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,22 +126,22 @@ class SettingsFragment : IdeFragment<FragmentSettingsBinding>(FragmentSettingsBi
                 activity.navUtil.navigateUp()
             }
         }
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (isResumed.not()) {
-                        return
-                    }
-                    if (preferencesAdapter.currentScreen == geminiScreen) {
-                        ChatProvider.regenerateModel()
-                    }
-                    if (!preferencesAdapter.goBack()) {
-                        isEnabled = false
-                        activity.navUtil.navigateUp()
-                    }
-                }
-            })
+        // requireActivity().onBackPressedDispatcher.addCallback(
+            // viewLifecycleOwner,
+            // object : OnBackPressedCallback(true) {
+                // override fun handleOnBackPressed() {
+                    // if (isResumed.not()) {
+                        // return
+                    // }
+                    // if (preferencesAdapter.currentScreen == geminiScreen) {
+                        // ChatProvider.regenerateModel()
+                    // }
+                    // if (!preferencesAdapter.goBack()) {
+                        // isEnabled = false
+                        // activity.navUtil.navigateUp()
+                    // }
+                // }
+            // })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

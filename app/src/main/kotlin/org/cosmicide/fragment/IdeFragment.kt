@@ -21,7 +21,9 @@ abstract class IdeFragment<T : ViewBinding> : Fragment {
 
   private var inflate: ((LayoutInflater, ViewGroup?, Boolean) -> T)? = null
 
-  protected var activity: MainActivity? = null
+  protected var _activity: MainActivity? = null
+  protected val activity: MainActivity
+    get() = checkNotNull(_activity) { "Cannot access MainActivity." }
 
   constructor(@LayoutRes layout: Int, bind: (View) -> T) : super(layout) {
     this.bind = bind
@@ -34,7 +36,7 @@ abstract class IdeFragment<T : ViewBinding> : Fragment {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    activity = requireActivity() as MainActivity
+    _activity = requireActivity() as MainActivity
   }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -56,6 +58,6 @@ abstract class IdeFragment<T : ViewBinding> : Fragment {
   override fun onDestroyView() {
     super.onDestroyView()
     _binding = null
-    activity = null
+    _activity = null
   }
 }

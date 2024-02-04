@@ -38,6 +38,10 @@
         <action
             android:id="@+id/action_projectsFragment_to_editorFragment"
             app:destination="@id/editorFragment" />
+
+        <action
+            android:id="@+id/action_projectsFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
 
     <fragment
@@ -128,5 +132,9 @@
         android:name="org.cosmicide.fragment.GitFragment"
         android:label="GitFragment"
         tools:layout="@layout/fragment_git">
+
+        <action
+            android:id="@+id/action_gitFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
 </navigation>

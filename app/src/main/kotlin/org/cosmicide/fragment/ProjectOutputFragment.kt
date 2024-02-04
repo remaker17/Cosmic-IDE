@@ -46,7 +46,7 @@ class ProjectOutputFragment : IdeFragment<FragmentCompileInfoBinding>(FragmentCo
                 R.id.reload -> {
                     if (isRunning) {
                         activity.navUtil.navigateUp()
-                        return
+                        true
                     }
                     binding.logList.post {
                         addLogItem(
