@@ -351,7 +351,7 @@ data class KotlinEnvironment(
 
 
     fun analysisOf(files: List<KtFile>, current: KtFile): Analysis {
-        val bindingTrace = CliBindingTrace()
+        val bindingTrace = CliBindingTrace(kotlinEnvironment.project)
         val project = files.first().project
         var componentProvider: ComponentProvider? = null
         analyzerWithCompilerReport.analyzeAndReport(files) {
@@ -523,7 +523,7 @@ data class KotlinEnvironment(
             setupIdeaStandaloneExecution()
             return KotlinEnvironment(
                 KotlinCoreEnvironment.createForProduction(
-                    parentDisposable = {},
+                    projectDisposable = {},
                     configFiles = EnvironmentConfigFiles.JVM_CONFIG_FILES,
                     configuration =
                     CompilerConfiguration().apply {

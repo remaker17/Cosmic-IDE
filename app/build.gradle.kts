@@ -69,7 +69,6 @@ android {
     lint.abortOnError = false
 
     configurations.configureEach {
-        exclude(group = "javax.inject", module = "javax.inject")
         exclude(group = "org.jetbrains", module = "annotations-java5")
         exclude(group = "com.google.j2objc", module = "j2objc-annotations")
         exclude(group = "com.google.errorprone", module = "error_prone_annotations")
@@ -181,7 +180,9 @@ configurations.all {
 
 dependencies {
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.51.1")
+    implementation("com.google.dagger:hilt-android:2.51.1") {
+        exclude(group = "javax.inject", module = "javax.inject")
+    }
     ksp("com.google.dagger:hilt-android-compiler:2.51.1")
 
     implementation("com.android.tools:r8:8.3.37")
@@ -232,7 +233,9 @@ dependencies {
     implementation(projects.feature.aliuhook)
     implementation("de.maxr1998:modernandroidpreferences:2.4.0-beta1")
 
-    implementation("com.github.Cosmic-Ide.kotlinc-android:kotlinc:2a0a6a7291")
+    implementation("com.github.Cosmic-Ide.kotlinc-android:kotlinc-android:f44ef957cd") {
+        exclude(group = "javax.inject", module = "javax.inject")
+    }
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1-Beta")
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
     implementation("org.slf4j:slf4j-simple:2.1.0-alpha1")

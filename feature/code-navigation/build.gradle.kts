@@ -34,5 +34,5 @@ android {
 }
 
 dependencies {
-    implementation("com.github.Cosmic-Ide.kotlinc-android:kotlinc:2a0a6a7291")
+    implementation("com.github.Cosmic-Ide.kotlinc-android:kotlinc-android:f44ef957cd")
 }
