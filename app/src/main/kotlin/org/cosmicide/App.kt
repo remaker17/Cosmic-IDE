@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.color.DynamicColors
 import com.itsaky.androidide.config.JavacConfigProvider
+import dagger.hilt.android.HiltAndroidApp
 import de.robv.android.xposed.XC_MethodHook
 import io.github.rosemoe.sora.langs.textmate.registry.FileProviderRegistry
 import io.github.rosemoe.sora.langs.textmate.registry.GrammarRegistry
@@ -51,6 +52,7 @@ import java.util.Locale
 import java.util.TimeZone
 import java.util.logging.Logger
 
+@HiltAndroidApp
 class App : Application() {
 
     companion object {

@@ -10,6 +10,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("dev.rikka.tools.materialthemebuilder")
     id("com.google.gms.google-services")
+    id("dagger.hilt.android.plugin")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -178,6 +180,10 @@ configurations.all {
 }
 
 dependencies {
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    ksp("com.google.dagger:hilt-android-compiler:2.51.1")
+
     implementation("com.android.tools:r8:8.3.37")
     implementation("com.android.tools.smali:smali-dexlib2:3.0.7")
 

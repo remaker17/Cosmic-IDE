@@ -21,6 +21,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.color.DynamicColors
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.cosmicide.common.Prefs
 import org.cosmicide.databinding.ActivityMainBinding
@@ -34,6 +35,7 @@ import rikka.shizuku.Shizuku
 import rikka.shizuku.Shizuku.OnRequestPermissionResultListener
 import rikka.shizuku.ShizukuProvider
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     var themeInt = 0
