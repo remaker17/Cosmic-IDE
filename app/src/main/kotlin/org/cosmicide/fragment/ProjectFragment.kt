@@ -9,6 +9,7 @@ package org.cosmicide.fragment
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -25,10 +26,10 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.PreferenceManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import dev.pranav.jgit.tasks.Credentials
 import dev.pranav.jgit.tasks.cloneRepository
 import kotlinx.coroutines.Dispatchers
@@ -48,13 +49,18 @@ import org.cosmicide.rewrite.util.unzip
 import org.cosmicide.util.CommonUtils
 import java.io.OutputStream
 import java.io.PrintWriter
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ProjectFragment : BaseBindingFragment<FragmentProjectBinding>(),
     ProjectAdapter.OnProjectEventListener {
 
     private val projectAdapter = ProjectAdapter(this)
     private val viewModel by activityViewModels<ProjectViewModel>()
     private var project: Project? = null
+
+    @Inject
+    lateinit var prefs: SharedPreferences
 
     private val zipContract = registerForActivityResult(CreateDocument("application/zip")) { uri ->
         if (uri == null || uri.path == null) return@registerForActivityResult
@@ -334,8 +340,6 @@ class ProjectFragment : BaseBindingFragment<FragmentProjectBinding>(),
     }
 
     private fun askClientName() {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
-
         val enteredName = prefs.getString("client_name", null)
         if (enteredName != null) return
 
@@ -366,7 +370,6 @@ class ProjectFragment : BaseBindingFragment<FragmentProjectBinding>(),
 
 
     private fun askForAnalyticsPermission() {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
         if (prefs.getBoolean("analytics_preference_asked", false)) return
         MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle(getString(R.string.analytics_permission_title))
